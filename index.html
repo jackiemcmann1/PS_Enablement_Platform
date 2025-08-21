@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>The Consultant's Way — Mock Platform</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #12203a;
+        --accent-yellow: #f29d23;
+        --accent-yellow-dark: #f29d0e;
+        --accent-green: #42ba7d;
+        --accent-red: #cc2836;
+        --accent-blue: #5280bc;
+        --white: #ffffff;
+        --bg: #f4f6fa;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --card: #ffffff;
+        --shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+        --radius: 14px;
+        --sidebar: 240px; /* collapsible width */
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      h1,
+      h2 {
+        margin: 0 0 0.5rem 0;
+      }
+      h1,
+      .brand-label {
+        font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial,
+          sans-serif;
+      }
+
+      /* ===== Layout ===== */
+      .app {
+        display: grid;
+        grid-template-columns: var(--sidebar) 1fr;
+        grid-template-rows: 56px 1fr;
+        height: 100vh;
+      }
+      .sidebar {
+        grid-row: 1/3;
+        background: var(--primary);
+        color: var(--white);
+        display: flex;
+        flex-direction: column;
+        width: var(--sidebar);
+        transition: width 0.18s ease;
+      }
+      .topbar {
+        grid-column: 2;
+        display: flex;
+        align-items: center;
+        padding: 0 18px;
+        background: #fff;
+        box-shadow: var(--shadow);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+      .avatar {
+        width: 32px;
+        height: 32px;
+        background: #e5e7eb;
+        border-radius: 50%;
+      }
+      .main {
+        grid-column: 2;
+        overflow: auto;
+        padding: 24px;
+      }
+
+      /* ===== Sidebar header ===== */
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 18px 20px;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+      }
+      .brand-mark {
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        background: var(--accent-yellow);
+      }
+      .brand-label {
+        white-space: nowrap;
+        color: #fff;
+      }
+
+      /* ===== Nav ===== */
+      .nav {
+        padding: 8px 8px 16px 8px;
+      }
+      .nav a {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        margin: 6px 8px;
+        border-radius: 10px;
+        color: #dce6ff;
+        text-decoration: none;
+      }
+      .nav a:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+      }
+      .nav a .ico {
+        width: 18px;
+        height: 18px;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        fill: none;
+      }
+      .nav a .label {
+        white-space: nowrap;
+      }
+      .nav a.active {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+      }
+      .nav a.active::before {
+        content: "";
+        position: absolute;
+        left: -8px;
+        top: 6px;
+        bottom: 6px;
+        width: 4px;
+        border-radius: 4px;
+        background: var(--accent-yellow);
+      }
+
+      /* ===== Collapsed state ===== */
+      body.sidebar-collapsed {
+        --sidebar: 72px;
+      }
+      body.sidebar-collapsed .brand .brand-label,
+      body.sidebar-collapsed .nav a .label {
+        display: none;
+      }
+      body.sidebar-collapsed .brand {
+        padding: 18px 16px;
+      }
+      body.sidebar-collapsed .nav a {
+        justify-content: center;
+        color: #e5edff;
+      }
+
+      /* ===== Topbar hamburger ===== */
+      .menu-btn {
+        appearance: none;
+        border: none;
+        cursor: pointer;
+        background: #f3f4f6;
+        color: #111;
+        padding: 8px;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--shadow);
+      }
+      .menu-btn:hover {
+        background: #e5e7eb;
+      }
+      .topbar .ico {
+        width: 20px;
+        height: 20px;
+        stroke: currentColor;
+        stroke-width: 2;
+        fill: none;
+      }
+      .topbar-right {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      /* ===== Dashboard bits ===== */
+      .search-wrapper {
+        display: flex;
+        justify-content: center;
+        margin: 14px 0 28px;
+      }
+      .search {
+        width: min(820px, 92vw);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 999px;
+        padding: 12px 16px;
+        box-shadow: var(--shadow);
+      }
+      .search input {
+        flex: 1;
+        border: none;
+        outline: none;
+        font-size: 16px;
+        padding: 6px 4px;
+      }
+      .search .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--accent-yellow);
+      }
+      .cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--accent-yellow);
+        color: #111;
+        border: none;
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .cta:hover {
+        background: var(--accent-yellow-dark);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+      @media (max-width: 880px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid #eee;
+        border-radius: var(--radius);
+        padding: 16px;
+        box-shadow: var(--shadow);
+      }
+      .card h2 {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+      .subtle {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+      th,
+      td {
+        padding: 10px 8px;
+        text-align: left;
+        border-bottom: 1px solid #f1f5f9;
+      }
+      th {
+        color: #6b7280;
+        font-weight: 600;
+      }
+
+      .bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 10px;
+        height: 120px;
+        margin-top: 8px;
+      }
+      .bar {
+        width: 14%;
+        min-width: 24px;
+        border-radius: 8px 8px 4px 4px;
+        background: linear-gradient(180deg, var(--accent-blue), #91b2de);
+      }
+      .bar.g {
+        background: linear-gradient(180deg, var(--accent-green), #7fd8ad);
+      }
+      .bar.r {
+        background: linear-gradient(180deg, var(--accent-red), #e67a86);
+      }
+      .bar.y {
+        background: linear-gradient(180deg, var(--accent-yellow), #ffd08f);
+      }
+
+      .course {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #f1f5f9;
+      }
+      .meter {
+        flex: 0 0 45%;
+        height: 8px;
+        background: #eef2f7;
+        border-radius: 999px;
+        overflow: hidden;
+      }
+      .meter > span {
+        display: block;
+        height: 100%;
+        background: var(--accent-blue);
+        border-radius: 999px;
+      }
+
+      .thumbs {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+      @media (max-width: 520px) {
+        .thumbs {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      .thumb {
+        aspect-ratio: 16/9;
+        background: #eef2ff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #547;
+        font-weight: 600;
+      }
+
+      .page {
+        display: none;
+      }
+      .page.active {
+        display: block;
+      }
+
+      /* ===== Practice page layout ===== */
+      .practice-wrap {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 16px;
+      }
+      @media (max-width: 880px) {
+        .practice-wrap {
+          grid-template-columns: 1fr;
+        }
+      }
+      .chat-list {
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .chat-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        cursor: pointer;
+        border: 1px solid #f1f5f9;
+        background: #fafbff;
+      }
+      .chat-item:hover {
+        background: #f2f6ff;
+      }
+      .chat-item.active {
+        background: #eef4ff;
+        border-color: #d7e3ff;
+        box-shadow: 0 4px 12px rgba(82, 128, 188, 0.18);
+      }
+      .chat-item .title {
+        font-weight: 600;
+      }
+      .chat-item .meta {
+        font-size: 12px;
+        color: #6b7280;
+      }
+      .chat-window {
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-direction: column;
+        height: min(70vh, 720px);
+      }
+      .chat-scroll {
+        flex: 1;
+        overflow: auto;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .msg {
+        max-width: 70%;
+        padding: 10px 12px;
+        border-radius: 12px;
+      }
+      .msg.user {
+        align-self: flex-end;
+        background: #eef4ff;
+        border: 1px solid #d7e3ff;
+      }
+      .msg.ai {
+        align-self: flex-start;
+        background: #f8fafc;
+        border: 1px solid #eef2f7;
+      }
+      .chat-input {
+        display: flex;
+        gap: 8px;
+        padding: 12px;
+        border-top: 1px solid #f1f5f9;
+      }
+      .chat-input input {
+        flex: 1;
+        border: 1px solid #e5e7eb;
+        border-radius: 999px;
+        padding: 10px 14px;
+        outline: none;
+      }
+      .room-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      /* ===== Performance page (canvas sizing) ===== */
+      #performance .card canvas {
+        width: 100%;
+        height: 220px;
+        display: block;
+      }
+      #performance .wide canvas {
+        height: 280px;
+      }
+      #performance .card h2 + .subtle {
+        margin-top: -2px;
+        margin-bottom: 8px;
+      }
+      /* Learning Center polish */
+      .cta {
+        justify-content: center;
+      } /* center text in filled buttons */
+      .btn-outline {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-weight: 700;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: #111;
+        text-decoration: none;
+        flex: 1;
+      }
+      .btn-outline:hover {
+        background: #f9fafb;
+        border-color: #d1d5db;
+      }
+
+      .course-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+      }
+      .course-card {
+        padding: 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        border-radius: 14px;
+      }
+      .course-thumb {
+        position: relative;
+        aspect-ratio: 16/9;
+        background-size: cover;
+        background-position: center;
+      }
+      .course-thumb::before {
+        /* soft brand overlay */
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          0deg,
+          rgba(18, 32, 58, 0.45),
+          rgba(18, 32, 58, 0.1)
+        );
+      }
+      .course-title-on-thumb {
+        position: absolute;
+        left: 16px;
+        bottom: 12px;
+        right: 16px;
+        z-index: 1;
+        color: #fff;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 1.2;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+      }
+      .course-body {
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .progress {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .btn-row {
+        display: flex;
+        gap: 10px;
+        margin-top: 8px;
+      }
+      /* --- Learning Center: lock card & button layout --- */
+.course-grid .card{ display:flex; flex-direction:column; height:100%; }
+.course-body{ flex:1; display:flex; flex-direction:column; gap:10px; }
+
+/* one row for actions, pinned to bottom */
+.btn-row{ display:flex; gap:10px; margin-top:auto; }
+
+/* shared button base */
+.btn, .btn-outline, .cta{
+  display:inline-flex; align-items:center; justify-content:center;
+  height:44px; padding:0 14px; border-radius:10px; font-weight:700;
+  text-decoration:none; white-space:nowrap;      /* prevent wrapping */
+  flex:1;                                        /* equal widths */
+}
+
+/* outline + filled variants (reuse your colors) */
+.btn-outline{
+  border:1px solid #E5E7EB; background:#fff; color:#111;
+}
+.btn-outline:hover{ background:#F9FAFB; border-color:#D1D5DB; }
+
+.cta{ background:var(--accent-yellow); color:#111; }
+.cta:hover{ background:var(--accent-yellow-dark); }
+/* --- Content Center --- */
+.content-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:20px;
+}
+.resource-card {
+  background:#fff; border-radius:14px; box-shadow:var(--shadow);
+  overflow:hidden; display:flex; flex-direction:column;
+  cursor:pointer; transition:transform .15s ease;
+}
+.resource-card:hover { transform:translateY(-3px); }
+.resource-thumb {
+  position:relative; aspect-ratio:16/9;
+  background-size:cover; background-position:center;
+}
+.resource-type {
+  position:absolute; top:8px; left:8px;
+  background:rgba(18,32,58,.8); color:#fff;
+  padding:4px 8px; font-size:12px; border-radius:6px;
+}
+.play-icon, .download-icon {
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-size:40px; color:#fff; opacity:.85;
+}
+.resource-body {
+  padding:14px; flex:1; display:flex; flex-direction:column; justify-content:space-between;
+}
+.resource-body h3 {
+  font-size:16px; font-weight:600; margin:0 0 6px;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true"></div>
+          <div class="brand-label">The Consultant's Way</div>
+        </div>
+        <nav class="nav">
+          <a href="#dashboard" data-page="dashboard" class="active">
+            <svg class="ico" viewBox="0 0 24 24">
+              <path d="M3 12l9-7 9 7M5 10v10h14V10" />
+            </svg>
+            <span class="label">Dashboard</span>
+          </a>
+          <a href="#practice" data-page="practice">
+            <svg class="ico" viewBox="0 0 24 24">
+              <path d="M4 5h16M4 12h16M4 19h16" />
+            </svg>
+            <span class="label">Practice Center</span>
+          </a>
+          <a href="#performance" data-page="performance">
+            <svg class="ico" viewBox="0 0 24 24">
+              <path d="M4 18h16M6 16V8M12 18V6M18 18v-4" />
+            </svg>
+            <span class="label">Performance Center</span>
+          </a>
+          <a href="#learning" data-page="learning">
+            <svg class="ico" viewBox="0 0 24 24">
+              <path d="M3 7l9-4 9 4-9 4-9-4M6 10v7l6 3 6-3v-7" />
+            </svg>
+            <span class="label">Learning Center</span>
+          </a>
+          <a href="#content" data-page="content">
+            <svg class="ico" viewBox="0 0 24 24">
+              <path d="M5 5h14v14H5zM10 8l6 4-6 4z" />
+            </svg>
+            <span class="label">Content Center</span>
+          </a>
+        </nav>
+      </aside>
+
+      <!-- Topbar -->
+      <header class="topbar">
+        <button
+          id="collapseBtnTop"
+          class="menu-btn"
+          aria-label="Toggle sidebar"
+          title="Toggle sidebar"
+        >
+          <svg viewBox="0 0 24 24" class="ico">
+            <path d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <div class="topbar-right">
+          <a class="subtle" href="#settings" data-page="settings">Settings</a>
+          <div class="avatar" title="Profile"></div>
+        </div>
+      </header>
+
+      <!-- Main -->
+      <main class="main">
+        <!-- DASHBOARD -->
+        <section id="dashboard" class="page active">
+          <div class="search-wrapper">
+            <div class="search">
+              <div class="dot"></div>
+              <input placeholder="Ask Me Anything" />
+              <a href="#practice" data-page="practice" class="cta">Search</a>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="card">
+              <h2>Practice Center</h2>
+              <div class="subtle">Recent practice sessions</div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Session</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Steering Committee Role Play</td>
+                    <td>Aug 19</td>
+                    <td>Completed</td>
+                  </tr>
+                  <tr>
+                    <td>Antibodies Case Study</td>
+                    <td>Aug 17</td>
+                    <td>In Progress</td>
+                  </tr>
+                  <tr>
+                    <td>Project Kick-Off Role Play</td>
+                    <td>Aug 11</td>
+                    <td>Not Started</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div style="margin-top: 12px">
+                <a href="#practice" data-page="practice" class="cta"
+                  >Keep Practicing</a
+                >
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>Performance Center</h2>
+              <div class="subtle">Last 6 scores</div>
+              <div class="bars">
+                <div class="bar" style="height: 72%"></div>
+                <div class="bar g" style="height: 88%"></div>
+                <div class="bar y" style="height: 64%"></div>
+                <div class="bar r" style="height: 40%"></div>
+                <div class="bar g" style="height: 92%"></div>
+                <div class="bar" style="height: 70%"></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>Learning Center</h2>
+              <div class="course">
+                <div>Trusted Consultant Basics</div>
+                <div class="meter"><span style="width: 68%"></span></div>
+                <div>68%</div>
+              </div>
+              <div class="course">
+                <div>Discovery Mastery</div>
+                <div class="meter"><span style="width: 42%"></span></div>
+                <div>42%</div>
+              </div>
+              <div class="course">
+                <div>Value Story & Proof</div>
+                <div class="meter"><span style="width: 90%"></span></div>
+                <div>90%</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>Content Center</h2>
+              <div class="thumbs">
+                <div class="thumb">Video 1</div>
+                <div class="thumb">Video 2</div>
+                <div class="thumb">Video 3</div>
+                <div class="thumb">Video 4</div>
+                <div class="thumb">Video 5</div>
+                <div class="thumb">Video 6</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PRACTICE -->
+        <section id="practice" class="page">
+          <h1 style="margin-bottom: 12px">Practice Center</h1>
+          <div class="practice-wrap">
+            <aside class="chat-list">
+              <div class="chat-item active">
+                <div class="title">Steering Committee Role Play</div>
+                <div class="meta">Last active • 2h ago</div>
+              </div>
+              <div class="chat-item">
+                <div class="title">Antibodies Case Study</div>
+                <div class="meta">Updated • Yesterday</div>
+              </div>
+              <div class="chat-item">
+                <div class="title">Project Kick-Off Role Play</div>
+                <div class="meta">Updated • Aug 11</div>
+              </div>
+              <div class="chat-item">
+                <div class="title">Discovery Q&A Warmup</div>
+                <div class="meta">Updated • Aug 7</div>
+              </div>
+              <button class="cta" style="margin-top: 8px">
+                + New Practice Thread
+              </button>
+            </aside>
+
+            <section class="chat-window">
+              <div class="chat-scroll">
+                <div class="msg ai">
+                  Welcome back! Ready to pick up your Steering Committee Role
+                  Play?
+                </div>
+                <div class="msg user">
+                  Yes — let’s focus on handling timeline pushback.
+                </div>
+                <div class="msg ai">
+                  Great. Try a 20-sec opener that frames the urgency without
+                  sounding defensive.
+                </div>
+              </div>
+              <div class="chat-input">
+                <input placeholder="Write a message or paste your prompt…" />
+                <div class="room-actions">
+                  <a href="#practice" data-page="practice" class="cta"
+                    >Enter Video Practice Room</a
+                  >
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <!-- PERFORMANCE -->
+        <section id="performance" class="page">
+          <h1 style="margin-bottom: 12px">Performance Center</h1>
+
+          <div class="grid">
+            <!-- Annual Review Score -->
+            <div class="card" style="grid-column: 1 / -1">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                "
+              >
+                <div>
+                  <h2>Annual Review Score</h2>
+                  <div class="subtle">
+                    Overall performance rating for the year
+                  </div>
+                </div>
+                <div
+                  style="
+                    font-size: 36px;
+                    font-weight: 700;
+                    color: var(--accent-green);
+                  "
+                >
+                  88 / 100
+                </div>
+              </div>
+            </div>
+
+            <!-- Project Reviews (Line) -->
+            <div class="card">
+              <h2>Project Reviews</h2>
+              <div class="subtle">Quarter-to-date</div>
+              <canvas id="projReviewsChart"></canvas>
+            </div>
+
+            <!-- Skill Practice (Bars) -->
+            <div class="card">
+              <h2>Skill Practice</h2>
+              <div class="subtle">Average scores by skill</div>
+              <canvas id="skillPracticeChart"></canvas>
+              <div class="subtle" style="margin-top: 8px">
+                Total Practices: 24 &nbsp;|&nbsp; Average Score: 83
+              </div>
+            </div>
+
+            <!-- Utilization & Projects (Dual-axis Lines) -->
+            <div class="card wide" style="grid-column: 1 / -1">
+              <h2>Utilization & Project Staffing</h2>
+              <canvas id="utilizationChart"></canvas>
+              <div class="subtle" style="margin-top: 8px">
+                Current Projects: 3 &nbsp;|&nbsp; YTD Projects: 12
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- LEARNING -->
+        <section id="learning" class="page">
+          <h1 style="margin-bottom:12px">Learning Center</h1>
+          <p class="subtle" style="margin-bottom:18px">Your enrolled courses.</p>
+        
+          <!-- Top actions -->
+          <div style="display:flex; gap:12px; align-items:center; justify-content:space-between; margin-bottom:18px;">
+            <a href="#" class="subtle">View more courses</a>
+            <div style="display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #E5E7EB; padding:6px 10px; border-radius:8px;">
+              <input type="text" placeholder="Search" style="border:none; outline:none; font-size:14px;" />
+              🔍
+            </div>
+          </div>
+        
+          <!-- Course grid -->
+          <div class="course-grid">
+            <!-- Card 1 -->
+            <div class="card course-card">
+              <div class="course-thumb"
+                   style="background-image:url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=60');">
+                <div class="course-title-on-thumb">Managing a Consulting Client</div>
+              </div>
+              <div class="course-body">
+                <div class="progress">0% complete</div>
+                <div class="btn-row">
+                  <a href="#" class="btn-outline">See Overview</a>
+                  <a href="#" class="cta">Start Course</a>
+                </div>
+              </div>
+            </div>
+        
+            <!-- Card 2 -->
+            <div class="card course-card">
+              <div class="course-thumb"
+                   style="background-image:url('https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=1200&q=60');">
+                <div class="course-title-on-thumb">Consultant's Tool Kit</div>
+              </div>
+              <div class="course-body">
+                <div class="progress">68% complete</div>
+                <div class="btn-row">
+                  <a href="#" class="btn-outline">See Overview</a>
+                  <a href="#" class="cta">Resume Course</a>
+                </div>
+              </div>
+            </div>
+        
+            <!-- Card 3 -->
+            <div class="card course-card">
+              <div class="course-thumb"
+                   style="background-image:url('https://images.unsplash.com/photo-1537432376769-00a099ff7f26?auto=format&fit=crop&w=1200&q=60');">
+                <div class="course-title-on-thumb">Managing Projects in a Consulting Environment</div>
+              </div>
+              <div class="course-body">
+                <div class="progress">93% complete</div>
+                <div class="btn-row">
+                  <a href="#" class="btn-outline">See Overview</a>
+                  <a href="#" class="cta">Resume Course</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+                </section>
+
+        <!-- CONTENT -->
+        <section id="content" class="page">
+          <h1 style="margin-bottom:12px">Content Center</h1>
+          <p class="subtle" style="margin-bottom:18px">Videos, guides, and templates to support your consulting journey.</p>
+        <!-- Search bar (same as Learning Center) -->
+<div style="display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #E5E7EB; padding:6px 10px; border-radius:8px; margin-bottom:18px;">
+  <input type="text" placeholder="Search resources…" style="border:none; outline:none; font-size:14px;" />
+  🔍
+</div>
+
+          <div class="content-grid">
+            <!-- Video -->
+            <div class="resource-card">
+              <div class="resource-thumb" style="background-image:url('https://img.youtube.com/vi/5MgBikgcWnY/maxresdefault.jpg');">
+                <div class="resource-type">Video</div>
+                <div class="play-icon">▶</div>
+              </div>
+              <div class="resource-body">
+                <h3>The Value Pyramid</h3>
+                <div class="subtle">5 min watch</div>
+              </div>
+            </div>
+        
+            <!-- Video -->
+            <div class="resource-card">
+              <div class="resource-thumb" style="background-image:url('https://img.youtube.com/vi/z9Uz1icjwrM/maxresdefault.jpg');">
+                <div class="resource-type">Video</div>
+                <div class="play-icon">▶</div>
+              </div>
+              <div class="resource-body">
+                <h3>Building Client Relationships</h3>
+                <div class="subtle">8 min watch</div>
+              </div>
+            </div>
+        
+            <!-- Guide -->
+            <div class="resource-card">
+              <div class="resource-thumb" style="background:#F0F4FF;">
+                <div class="resource-type">Guide</div>
+                <div class="download-icon">⬇</div>
+              </div>
+              <div class="resource-body">
+                <h3>Stakeholder Matrix Guide</h3>
+                <div class="subtle">PDF Download</div>
+              </div>
+            </div>
+        
+            <!-- Video -->
+            <div class="resource-card">
+              <div class="resource-thumb" style="background-image:url('https://img.youtube.com/vi/2Xc9gXyf2G4/maxresdefault.jpg');">
+                <div class="resource-type">Video</div>
+                <div class="play-icon">▶</div>
+              </div>
+              <div class="resource-body">
+                <h3>Client Update Meetings</h3>
+                <div class="subtle">4 min watch</div>
+              </div>
+            </div>
+        
+            <!-- Video -->
+            <div class="resource-card">
+              <div class="resource-thumb" style="background-image:url('https://img.youtube.com/vi/HVsySz-h9r4/maxresdefault.jpg');">
+                <div class="resource-type">Video</div>
+                <div class="play-icon">▶</div>
+              </div>
+              <div class="resource-body">
+                <h3>Introduction to Selling Professional Services</h3>
+                <div class="subtle">12 min watch</div>
+              </div>
+            </div>
+        
+            <!-- Template -->
+            <div class="resource-card">
+              <div class="resource-thumb" style="background:#FFF7E5;">
+                <div class="resource-type">Template</div>
+                <div class="download-icon">⬇</div>
+              </div>
+              <div class="resource-body">
+                <h3>Template: Communication Plan</h3>
+                <div class="subtle">Word Document</div>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+
+        <!-- SETTINGS -->
+        <section id="settings" class="page">
+          <h1>Settings</h1>
+          <p class="subtle">This is a mock settings page.</p>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      // ---- Routing (works for nav, topbar, and any [data-page]) ----
+      function wireDataPageLinks(scope = document) {
+        scope.querySelectorAll("[data-page]").forEach((el) => {
+          el.addEventListener("click", (e) => {
+            const page = el.dataset.page;
+            if (!page) return;
+            e.preventDefault();
+            history.pushState({ page }, "", "#" + page);
+            show(page);
+          });
+        });
+      }
+
+      const pages = document.querySelectorAll(".page");
+      function show(pageId) {
+        pages.forEach((p) => p.classList.toggle("active", p.id === pageId));
+        document
+          .querySelectorAll(".nav a")
+          .forEach((a) =>
+            a.classList.toggle("active", a.dataset.page === pageId)
+          );
+        if (pageId === "performance") requestAnimationFrame(drawAllCharts);
+      }
+
+      wireDataPageLinks();
+      const initial = location.hash?.replace("#", "") || "dashboard";
+      show(initial);
+      window.addEventListener("popstate", (e) =>
+        show((e.state && e.state.page) || "dashboard")
+      );
+
+      // Sidebar collapse
+      document
+        .getElementById("collapseBtnTop")
+        ?.addEventListener("click", () => {
+          document.body.classList.toggle("sidebar-collapsed");
+          // If currently on Performance, redraw to fit new width
+          if (document.querySelector("#performance.page.active"))
+            requestAnimationFrame(drawAllCharts);
+        });
+
+      // ---- Tiny chart drawer (Canvas 2D) ----
+      const BRAND = {
+        blue: "#5280BC",
+        green: "#42BA7D",
+        yellow: "#F29D23",
+        red: "#CC2836",
+        grid: "#EEF2F7",
+        axis: "#E5E7EB",
+      };
+
+      function dpr() {
+        return window.devicePixelRatio || 1;
+      }
+
+      function prepareCanvas(canvas) {
+        const rect = canvas.getBoundingClientRect();
+        const ratio = dpr();
+        canvas.width = Math.max(300, rect.width * ratio);
+        canvas.height = Math.max(160, rect.height * ratio);
+        const ctx = canvas.getContext("2d");
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        return { ctx, w: rect.width, h: rect.height };
+      }
+
+      function grid(
+        ctx,
+        w,
+        h,
+        left = 40,
+        rightPad = 12,
+        top = 12,
+        bottomPad = 16
+      ) {
+        ctx.strokeStyle = BRAND.grid;
+        ctx.lineWidth = 1;
+        for (let i = 0; i <= 4; i++) {
+          const y = top + (h - top - bottomPad) * (i / 4);
+          ctx.beginPath();
+          ctx.moveTo(left, y);
+          ctx.lineTo(w - rightPad, y);
+          ctx.stroke();
+        }
+        ctx.strokeStyle = BRAND.axis;
+        ctx.beginPath();
+        ctx.moveTo(left, top);
+        ctx.lineTo(left, h - bottomPad);
+        ctx.stroke();
+        return { left, right: w - rightPad, top, bottom: h - bottomPad };
+      }
+
+      function lineChart(
+        canvas,
+        labels,
+        data,
+        color,
+        yMin = 0,
+        yMax = 100,
+        fill = true
+      ) {
+        const { ctx, w, h } = prepareCanvas(canvas);
+        const area = grid(ctx, w, h);
+        const X = (i) =>
+          area.left + (i / (labels.length - 1)) * (area.right - area.left);
+        const Y = (v) =>
+          area.bottom - ((v - yMin) / (yMax - yMin)) * (area.bottom - area.top);
+
+        if (fill) {
+          ctx.beginPath();
+          ctx.moveTo(X(0), Y(data[0]));
+          for (let i = 1; i < data.length; i++) ctx.lineTo(X(i), Y(data[i]));
+          ctx.lineTo(X(data.length - 1), area.bottom);
+          ctx.lineTo(X(0), area.bottom);
+          ctx.closePath();
+          ctx.fillStyle = color + "22";
+          ctx.fill();
+        }
+
+        ctx.beginPath();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = color;
+        ctx.moveTo(X(0), Y(data[0]));
+        for (let i = 1; i < data.length; i++) ctx.lineTo(X(i), Y(data[i]));
+        ctx.stroke();
+
+        ctx.fillStyle = color;
+        data.forEach((v, i) => {
+          ctx.beginPath();
+          ctx.arc(X(i), Y(v), 3, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        ctx.fillStyle = "#6B7280";
+        ctx.font = "12px system-ui, -apple-system, Segoe UI, Arial";
+        labels.forEach((t, i) => ctx.fillText(t, X(i) - 8, h - 2));
+      }
+
+      function barChart(canvas, labels, data, colors, yMax = 100) {
+        const { ctx, w, h } = prepareCanvas(canvas);
+        const area = grid(ctx, w, h);
+        const bw = ((area.right - area.left) / labels.length) * 0.6;
+        labels.forEach((t, i) => {
+          const x =
+            area.left +
+            ((i + 0.5) * (area.right - area.left)) / labels.length -
+            bw / 2;
+          const y = area.bottom - (data[i] / yMax) * (area.bottom - area.top);
+          const r = 8;
+          ctx.fillStyle = colors[i] || BRAND.blue;
+          const barH = area.bottom - y;
+          ctx.beginPath();
+          ctx.moveTo(x, y + r);
+          ctx.arcTo(x, y, x + r, y, r);
+          ctx.lineTo(x + bw - r, y);
+          ctx.arcTo(x + bw, y, x + bw, y + r, r);
+          ctx.lineTo(x + bw, y + barH);
+          ctx.lineTo(x, y + barH);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.fillStyle = "#6B7280";
+          ctx.font = "12px system-ui, -apple-system, Segoe UI, Arial";
+          const label = t.length > 10 ? t.slice(0, 10) + "…" : t;
+          ctx.fillText(label, x, h - 2);
+        });
+      }
+
+      function dualLineChart(
+        canvas,
+        labels,
+        leftData,
+        rightData,
+        leftColor,
+        rightColor,
+        leftMax = 100,
+        rightMax = 5
+      ) {
+        const { ctx, w, h } = prepareCanvas(canvas);
+        const area = grid(ctx, w, h);
+        const X = (i) =>
+          area.left + (i / (labels.length - 1)) * (area.right - area.left);
+        const YL = (v) =>
+          area.bottom - (v / leftMax) * (area.bottom - area.top);
+        const YR = (v) =>
+          area.bottom - (v / rightMax) * (area.bottom - area.top);
+
+        // Left series (utilization) area+line
+        ctx.beginPath();
+        ctx.moveTo(X(0), YL(leftData[0]));
+        for (let i = 1; i < leftData.length; i++)
+          ctx.lineTo(X(i), YL(leftData[i]));
+        ctx.lineTo(X(leftData.length - 1), area.bottom);
+        ctx.lineTo(X(0), area.bottom);
+        ctx.closePath();
+        ctx.fillStyle = leftColor + "22";
+        ctx.fill();
+        ctx.beginPath();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = leftColor;
+        ctx.moveTo(X(0), YL(leftData[0]));
+        for (let i = 1; i < leftData.length; i++)
+          ctx.lineTo(X(i), YL(leftData[i]));
+        ctx.stroke();
+
+        // Right series (projects) line
+        ctx.beginPath();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = rightColor;
+        ctx.moveTo(X(0), YR(rightData[0]));
+        for (let i = 1; i < rightData.length; i++)
+          ctx.lineTo(X(i), YR(rightData[i]));
+        ctx.stroke();
+
+        // Points
+        ctx.fillStyle = leftColor;
+        leftData.forEach((v, i) => {
+          ctx.beginPath();
+          ctx.arc(X(i), YL(v), 3, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        ctx.fillStyle = rightColor;
+        rightData.forEach((v, i) => {
+          ctx.beginPath();
+          ctx.arc(X(i), YR(v), 3, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // X labels
+        ctx.fillStyle = "#6B7280";
+        ctx.font = "12px system-ui, -apple-system, Segoe UI, Arial";
+        labels.forEach((t, i) => ctx.fillText(t, X(i) - 8, h - 2));
+      }
+
+      function drawAllCharts() {
+        const pr = document.getElementById("projReviewsChart");
+        const sp = document.getElementById("skillPracticeChart");
+        const ut = document.getElementById("utilizationChart");
+        if (pr)
+          lineChart(
+            pr,
+            ["Jan", "Feb", "Mar", "Apr"],
+            [85, 90, 88, 92],
+            BRAND.blue,
+            70,
+            100,
+            true
+          );
+        if (sp)
+          barChart(
+            sp,
+            ["Communication", "Leadership", "Technical", "Collaboration"],
+            [80, 75, 90, 85],
+            [BRAND.yellow, BRAND.blue, BRAND.green, BRAND.blue],
+            100
+          );
+        if (ut)
+          dualLineChart(
+            ut,
+            ["Jan", "Feb", "Mar", "Apr"],
+            [65, 72, 80, 76],
+            [2, 3, 4, 3],
+            BRAND.blue,
+            BRAND.green,
+            100,
+            5
+          );
+      }
+
+      // Redraw on resize (if on Performance)
+      window.addEventListener("resize", () => {
+        if (document.querySelector("#performance.page.active"))
+          requestAnimationFrame(drawAllCharts);
+      });
+    </script>
+  </body>
+</html>
