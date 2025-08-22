@@ -171,22 +171,44 @@
         color: #e5edff;
       }
 
-      /* ===== Topbar hamburger ===== */
-      .menu-btn {
+      /* ===== Buttons ===== */
+      .menu-btn,
+      .brand-toggle {
         appearance: none;
         border: none;
         cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .menu-btn {
         background: #f3f4f6;
         color: #111;
         padding: 8px;
         border-radius: 10px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
         box-shadow: var(--shadow);
       }
       .menu-btn:hover {
         background: #e5e7eb;
+      }
+      .brand-toggle {
+        padding: 0;
+        background: none;
+        color: var(--white);
+      }
+      .brand-toggle .hamburger {
+        display: none;
+        width: 20px;
+        height: 20px;
+        stroke: currentColor;
+        stroke-width: 2;
+        fill: none;
+      }
+      body.sidebar-collapsed .brand-toggle .brand-mark {
+        display: none;
+      }
+      body.sidebar-collapsed .brand-toggle .hamburger {
+        display: block;
       }
       .topbar .ico {
         width: 20px;
@@ -573,7 +595,17 @@
       <!-- Sidebar -->
       <aside class="sidebar">
         <div class="brand">
-          <div class="brand-mark" aria-hidden="true"></div>
+          <button
+            id="collapseBtnSidebar"
+            class="brand-toggle"
+            aria-label="Toggle sidebar"
+            title="Toggle sidebar"
+          >
+            <div class="brand-mark" aria-hidden="true"></div>
+            <svg class="hamburger" viewBox="0 0 24 24">
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
           <div class="brand-label">The Consultant's Way</div>
         </div>
         <nav class="nav">
@@ -612,16 +644,6 @@
 
       <!-- Topbar -->
       <header class="topbar">
-        <button
-          id="collapseBtnTop"
-          class="menu-btn"
-          aria-label="Toggle sidebar"
-          title="Toggle sidebar"
-        >
-          <svg viewBox="0 0 24 24" class="ico">
-            <path d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
         <div class="topbar-right">
           <a class="subtle" href="#settings" data-page="settings">Settings</a>
           <div class="avatar" title="Profile"></div>
@@ -1087,7 +1109,7 @@
 
       // Sidebar collapse
       document
-        .getElementById("collapseBtnTop")
+        .getElementById("collapseBtnSidebar")
         ?.addEventListener("click", () => {
           document.body.classList.toggle("sidebar-collapsed");
           // If currently on Performance, redraw to fit new width
