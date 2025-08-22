@@ -232,52 +232,15 @@
         border-radius: 50%;
         background: var(--accent-yellow);
       }
-      .cta {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        background: var(--accent-yellow);
-        color: #111;
-        border: none;
-        padding: 10px 14px;
-        border-radius: 10px;
-        font-weight: 700;
-        cursor: pointer;
-        text-decoration: none;
-      }
-      .cta.cta-sm {
-        font-size: 14px;
-      }
-      .cta:hover {
-        background: var(--accent-yellow-dark);
-      }
-
-      .cta.green {
-        background: var(--accent-green);
-        color: #fff;
-      }
-      .cta.green:hover {
-        background: #3aa76c;
-      }
-      .cta.blue {
-        background: var(--accent-blue);
-        color: #fff;
-      }
-      .cta.blue:hover {
-        background: #416da8;
-      }
-      .cta.red {
-        background: var(--accent-red);
-        color: #fff;
-      }
-      .cta.red:hover {
-        background: #b8222f;
-      }
 
       .grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 18px;
+      }
+      .grid .card {
+        display: flex;
+        flex-direction: column;
       }
       @media (max-width: 880px) {
         .grid {
@@ -501,28 +464,6 @@
         margin-top: -2px;
         margin-bottom: 8px;
       }
-      /* Learning Center polish */
-      .cta {
-        justify-content: center;
-      } /* center text in filled buttons */
-      .btn-outline {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 10px 14px;
-        border-radius: 10px;
-        font-weight: 700;
-        border: 1px solid #e5e7eb;
-        background: #fff;
-        color: #111;
-        text-decoration: none;
-        flex: 1;
-      }
-      .btn-outline:hover {
-        background: #f9fafb;
-        border-color: #d1d5db;
-      }
 
       .course-grid {
         display: grid;
@@ -569,40 +510,30 @@
         padding: 14px;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 10px;
+        flex: 1;
       }
       .progress {
         font-size: 13px;
         color: var(--muted);
       }
-      .btn-row {
-        display: flex;
-        gap: 10px;
-        margin-top: 8px;
-      }
       /* --- Learning Center: lock card & button layout --- */
 .course-grid .card{ display:flex; flex-direction:column; height:100%; }
-.course-body{ flex:1; display:flex; flex-direction:column; gap:10px; }
 
 /* one row for actions, pinned to bottom */
-.btn-row{ display:flex; gap:10px; margin-top:auto; }
+.btn-row{ display:flex; gap:10px; }
+.card-action{ margin-top:auto; padding-top:12px; }
 
 /* shared button base */
-.btn, .btn-outline, .cta{
+.cta{
   display:inline-flex; align-items:center; justify-content:center;
   height:44px; padding:0 14px; border-radius:10px; font-weight:700;
   text-decoration:none; white-space:nowrap;      /* prevent wrapping */
   flex:1;                                        /* equal widths */
+  background:var(--accent-yellow); color:#111; border:none;
 }
-
-/* outline + filled variants (reuse your colors) */
-.btn-outline{
-  border:1px solid #E5E7EB; background:#fff; color:#111;
-}
-.btn-outline:hover{ background:#F9FAFB; border-color:#D1D5DB; }
-
-.cta{ background:var(--accent-yellow); color:#111; }
 .cta:hover{ background:var(--accent-yellow-dark); }
+.cta.cta-sm{ font-size:14px; }
 /* --- Content Center --- */
 .content-grid {
   display:grid;
@@ -739,7 +670,7 @@
                   </tr>
                 </tbody>
               </table>
-              <div style="margin-top: 12px">
+              <div class="card-action">
                 <a href="#practice" data-page="practice" class="cta cta-sm"
                   >Keep Practicing</a
                 >
@@ -757,11 +688,11 @@
                 <div class="bar g" style="height: 92%"></div>
                 <div class="bar" style="height: 70%"></div>
               </div>
-              <div style="margin-top: 12px">
+              <div class="card-action">
                 <a
                   href="#performance"
                   data-page="performance"
-                  class="cta cta-sm green"
+                  class="cta cta-sm"
                   >Check Progress</a
                 >
               </div>
@@ -784,11 +715,11 @@
                 <div class="meter"><span style="width: 90%"></span></div>
                 <div>90%</div>
               </div>
-              <div style="margin-top: 12px">
+              <div class="card-action">
                 <a
                   href="#learning"
                   data-page="learning"
-                  class="cta cta-sm blue"
+                  class="cta cta-sm"
                   >Take Course</a
                 >
               </div>
@@ -804,11 +735,11 @@
                 <div class="thumb">Video 5</div>
                 <div class="thumb">Video 6</div>
               </div>
-              <div style="margin-top: 12px">
+              <div class="card-action">
                 <a
                   href="#content"
                   data-page="content"
-                  class="cta cta-sm red"
+                  class="cta cta-sm"
                   >Check It Out</a
                 >
               </div>
@@ -952,9 +883,9 @@
               </div>
               <div class="course-body">
                 <div class="progress">0% complete</div>
-                <div class="btn-row">
-                  <a href="#" class="btn-outline">See Overview</a>
-                  <a href="#" class="cta">Start Course</a>
+                <div class="btn-row card-action">
+                  <a href="#" class="cta cta-sm">See Overview</a>
+                  <a href="#" class="cta cta-sm">Start Course</a>
                 </div>
               </div>
             </div>
@@ -967,9 +898,9 @@
               </div>
               <div class="course-body">
                 <div class="progress">68% complete</div>
-                <div class="btn-row">
-                  <a href="#" class="btn-outline">See Overview</a>
-                  <a href="#" class="cta">Resume Course</a>
+                <div class="btn-row card-action">
+                  <a href="#" class="cta cta-sm">See Overview</a>
+                  <a href="#" class="cta cta-sm">Resume Course</a>
                 </div>
               </div>
             </div>
@@ -982,9 +913,9 @@
               </div>
               <div class="course-body">
                 <div class="progress">93% complete</div>
-                <div class="btn-row">
-                  <a href="#" class="btn-outline">See Overview</a>
-                  <a href="#" class="cta">Resume Course</a>
+                <div class="btn-row card-action">
+                  <a href="#" class="cta cta-sm">See Overview</a>
+                  <a href="#" class="cta cta-sm">Resume Course</a>
                 </div>
               </div>
             </div>
