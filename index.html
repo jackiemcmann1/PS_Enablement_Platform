@@ -336,15 +336,15 @@
         }
       }
       .thumb {
+        position: relative;
         aspect-ratio: 16/9;
-        background: var(--accent-red);
-        border: 1px solid var(--accent-red);
+        background-size: cover;
+        background-position: center;
         border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #fff;
-        font-weight: 600;
+        overflow: hidden;
+      }
+      .thumbs .play-icon {
+        font-size: 24px;
       }
 
       .page {
@@ -728,12 +728,48 @@
             <div class="card">
               <h2>Content Center</h2>
               <div class="thumbs">
-                <div class="thumb">Video 1</div>
-                <div class="thumb">Video 2</div>
-                <div class="thumb">Video 3</div>
-                <div class="thumb">Video 4</div>
-                <div class="thumb">Video 5</div>
-                <div class="thumb">Video 6</div>
+                <div
+                  class="thumb"
+                  style="background-image:url('https://img.youtube.com/vi/5MgBikgcWnY/maxresdefault.jpg');"
+                >
+                  <div class="resource-type">Video</div>
+                  <div class="play-icon">▶</div>
+                </div>
+                <div
+                  class="thumb"
+                  style="background-image:url('https://img.youtube.com/vi/z9Uz1icjwrM/maxresdefault.jpg');"
+                >
+                  <div class="resource-type">Video</div>
+                  <div class="play-icon">▶</div>
+                </div>
+                <div
+                  class="thumb"
+                  style="background-image:url('https://img.youtube.com/vi/2Xc9gXyf2G4/maxresdefault.jpg');"
+                >
+                  <div class="resource-type">Video</div>
+                  <div class="play-icon">▶</div>
+                </div>
+                <div
+                  class="thumb"
+                  style="background-image:url('https://img.youtube.com/vi/HVsySz-h9r4/maxresdefault.jpg');"
+                >
+                  <div class="resource-type">Video</div>
+                  <div class="play-icon">▶</div>
+                </div>
+                <div
+                  class="thumb"
+                  style="background-image:url('https://img.youtube.com/vi/3fumBcKC6RE/maxresdefault.jpg');"
+                >
+                  <div class="resource-type">Video</div>
+                  <div class="play-icon">▶</div>
+                </div>
+                <div
+                  class="thumb"
+                  style="background-image:url('https://img.youtube.com/vi/l-gQLqv9f4o/maxresdefault.jpg');"
+                >
+                  <div class="resource-type">Video</div>
+                  <div class="play-icon">▶</div>
+                </div>
               </div>
               <div class="card-action">
                 <a
