@@ -110,13 +110,6 @@
         font-weight: 700;
         letter-spacing: 0.2px;
       }
-      .brand-mark {
-        width: 20px;
-        height: 20px;
-        border-radius: 6px;
-        background: var(--accent-yellow);
-        margin-right: 8px;
-      }
       .brand-label {
         white-space: nowrap;
         color: #fff;
@@ -211,12 +204,6 @@
         display: block;
         width: 20px;
         height: 20px;
-        stroke: currentColor;
-        stroke-width: 2;
-        fill: none;
-      }
-      body.sidebar-collapsed .brand-toggle .brand-mark {
-        display: none;
       }
       .topbar .ico {
         width: 20px;
@@ -617,9 +604,14 @@
             aria-label="Toggle sidebar"
             title="Toggle sidebar"
           >
-            <div class="brand-mark" aria-hidden="true"></div>
-            <svg class="hamburger" viewBox="0 0 24 24">
-              <path d="M4 6h16M4 12h16M4 18h16" />
+            <svg class="hamburger" viewBox="0 0 24 24" aria-hidden="true">
+              <rect width="24" height="24" rx="6" fill="var(--accent-yellow)" />
+              <path
+                d="M4 6h16M4 12h16M4 18h16"
+                stroke="#1f2937"
+                stroke-width="2"
+                fill="none"
+              />
             </svg>
           </button>
           <div class="brand-label">The Consultant's Way</div>
