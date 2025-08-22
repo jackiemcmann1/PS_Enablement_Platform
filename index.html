@@ -338,10 +338,15 @@
       .thumb {
         position: relative;
         aspect-ratio: 16/9;
-        background-size: cover;
-        background-position: center;
         border-radius: 12px;
         overflow: hidden;
+        background-color: #ccc;
+      }
+      .thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
       }
       .thumbs .play-icon {
         font-size: 24px;
@@ -728,45 +733,33 @@
             <div class="card">
               <h2>Content Center</h2>
               <div class="thumbs">
-                <div
-                  class="thumb"
-                  style="background-image:url('https://img.youtube.com/vi/5MgBikgcWnY/maxresdefault.jpg');"
-                >
+                <div class="thumb">
+                  <img src="https://img.youtube.com/vi/5MgBikgcWnY/maxresdefault.jpg" alt="Video thumbnail" onerror="this.src='assets/placeholder.svg';" />
                   <div class="resource-type">Video</div>
                   <div class="play-icon">▶</div>
                 </div>
-                <div
-                  class="thumb"
-                  style="background-image:url('https://img.youtube.com/vi/z9Uz1icjwrM/maxresdefault.jpg');"
-                >
+                <div class="thumb">
+                  <img src="https://img.youtube.com/vi/z9Uz1icjwrM/maxresdefault.jpg" alt="Video thumbnail" onerror="this.src='assets/placeholder.svg';" />
                   <div class="resource-type">Video</div>
                   <div class="play-icon">▶</div>
                 </div>
-                <div
-                  class="thumb"
-                  style="background-image:url('https://img.youtube.com/vi/2Xc9gXyf2G4/maxresdefault.jpg');"
-                >
+                <div class="thumb">
+                  <img src="https://img.youtube.com/vi/2Xc9gXyf2G4/maxresdefault.jpg" alt="Video thumbnail" onerror="this.src='assets/placeholder.svg';" />
                   <div class="resource-type">Video</div>
                   <div class="play-icon">▶</div>
                 </div>
-                <div
-                  class="thumb"
-                  style="background-image:url('https://img.youtube.com/vi/HVsySz-h9r4/maxresdefault.jpg');"
-                >
+                <div class="thumb">
+                  <img src="https://img.youtube.com/vi/HVsySz-h9r4/maxresdefault.jpg" alt="Video thumbnail" onerror="this.src='assets/placeholder.svg';" />
                   <div class="resource-type">Video</div>
                   <div class="play-icon">▶</div>
                 </div>
-                <div
-                  class="thumb"
-                  style="background-image:url('https://img.youtube.com/vi/3fumBcKC6RE/maxresdefault.jpg');"
-                >
+                <div class="thumb">
+                  <img src="https://img.youtube.com/vi/3fumBcKC6RE/maxresdefault.jpg" alt="Video thumbnail" onerror="this.src='assets/placeholder.svg';" />
                   <div class="resource-type">Video</div>
                   <div class="play-icon">▶</div>
                 </div>
-                <div
-                  class="thumb"
-                  style="background-image:url('https://img.youtube.com/vi/l-gQLqv9f4o/maxresdefault.jpg');"
-                >
+                <div class="thumb">
+                  <img src="https://img.youtube.com/vi/l-gQLqv9f4o/maxresdefault.jpg" alt="Video thumbnail" onerror="this.src='assets/placeholder.svg';" />
                   <div class="resource-type">Video</div>
                   <div class="play-icon">▶</div>
                 </div>
