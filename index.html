@@ -80,10 +80,20 @@
         z-index: 10;
       }
       .avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #e5e7eb;
         width: 32px;
         height: 32px;
-        background: #e5e7eb;
         border-radius: 50%;
+      }
+      .avatar-icon {
+        width: 20px;
+        height: 20px;
+        stroke: #374151;
+        stroke-width: 2;
+        fill: none;
       }
       .main {
         grid-column: 2;
@@ -652,7 +662,12 @@
       <header class="topbar">
         <div class="topbar-right">
           <a class="subtle" href="#settings" data-page="settings">Settings</a>
-          <div class="avatar" title="Profile"></div>
+          <div class="avatar" title="Profile">
+            <svg class="avatar-icon" viewBox="0 0 24 24">
+              <circle cx="12" cy="8" r="4" />
+              <path d="M2 22c0-5.5 4.5-10 10-10s10 4.5 10 10" />
+            </svg>
+          </div>
         </div>
       </header>
 
