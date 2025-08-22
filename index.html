@@ -252,6 +252,28 @@
         background: var(--accent-yellow-dark);
       }
 
+      .cta.green {
+        background: var(--accent-green);
+        color: #fff;
+      }
+      .cta.green:hover {
+        background: #3aa76c;
+      }
+      .cta.blue {
+        background: var(--accent-blue);
+        color: #fff;
+      }
+      .cta.blue:hover {
+        background: #416da8;
+      }
+      .cta.red {
+        background: var(--accent-red);
+        color: #fff;
+      }
+      .cta.red:hover {
+        background: #b8222f;
+      }
+
       .grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -352,13 +374,13 @@
       }
       .thumb {
         aspect-ratio: 16/9;
-        background: #eef2ff;
-        border: 1px solid #e5e7eb;
+        background: var(--accent-red);
+        border: 1px solid var(--accent-red);
         border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #547;
+        color: #fff;
         font-weight: 600;
       }
 
@@ -735,6 +757,14 @@
                 <div class="bar g" style="height: 92%"></div>
                 <div class="bar" style="height: 70%"></div>
               </div>
+              <div style="margin-top: 12px">
+                <a
+                  href="#performance"
+                  data-page="performance"
+                  class="cta cta-sm green"
+                  >Check Progress</a
+                >
+              </div>
             </div>
 
             <div class="card">
@@ -754,6 +784,14 @@
                 <div class="meter"><span style="width: 90%"></span></div>
                 <div>90%</div>
               </div>
+              <div style="margin-top: 12px">
+                <a
+                  href="#learning"
+                  data-page="learning"
+                  class="cta cta-sm blue"
+                  >Take Course</a
+                >
+              </div>
             </div>
 
             <div class="card">
@@ -765,6 +803,14 @@
                 <div class="thumb">Video 4</div>
                 <div class="thumb">Video 5</div>
                 <div class="thumb">Video 6</div>
+              </div>
+              <div style="margin-top: 12px">
+                <a
+                  href="#content"
+                  data-page="content"
+                  class="cta cta-sm red"
+                  >Check It Out</a
+                >
               </div>
             </div>
           </div>
