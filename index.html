@@ -591,6 +591,71 @@
   font-size:16px; font-weight:600; margin:0 0 6px;
 }
 
+      /* --- Admin Center --- */
+      .admin-block {
+        padding: 8px 8px 16px 8px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .admin-header {
+        font-size: 12px;
+        text-transform: uppercase;
+        margin: 0 0 8px 8px;
+        color: #9eb1d9;
+      }
+      .admin-link {
+        display: block;
+        padding: 10px 12px;
+        margin: 6px 8px;
+        border-radius: 10px;
+        color: #dce6ff;
+        text-decoration: none;
+      }
+      .admin-link:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+      }
+      .admin-link.active {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+      }
+
+      /* --- Team Dashboard --- */
+      #team .filters-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 16px;
+        align-items: center;
+      }
+      #team .filters-row select {
+        padding: 8px 10px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        background: #fff;
+      }
+      .link-like {
+        color: var(--accent-blue);
+        cursor: pointer;
+        text-decoration: underline;
+        font-size: 14px;
+      }
+      .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+      .kpi-grid .kpi {
+        font-size: 28px;
+        font-weight: 700;
+        margin-top: 4px;
+      }
+      #team .card canvas {
+        width: 100%;
+        height: 220px;
+        display: block;
+      }
+
     </style>
   </head>
   <body>
@@ -650,6 +715,10 @@
             <span class="label">Content Center</span>
           </a>
         </nav>
+        <div class="admin-block">
+          <div class="admin-header">Admin Center</div>
+          <a href="#team" data-page="team" class="admin-link">Team Dashboard</a>
+        </div>
       </aside>
 
       <!-- Topbar -->
@@ -1080,7 +1149,59 @@
             </div>
           </div>
         </section>
-        
+
+        <!-- TEAM DASHBOARD -->
+        <section id="team" class="page">
+          <h1>Team Dashboard</h1>
+          <div class="filters-row">
+            <select>
+              <option>All Regions</option>
+            </select>
+            <select>
+              <option>All Roles</option>
+            </select>
+            <a href="#" class="link-like">Reset</a>
+          </div>
+          <div class="kpi-grid">
+            <div class="card">
+              <h2>Total Members</h2>
+              <div class="kpi">24</div>
+            </div>
+            <div class="card">
+              <h2>Active</h2>
+              <div class="kpi">18</div>
+            </div>
+            <div class="card">
+              <h2>Pending</h2>
+              <div class="kpi">6</div>
+            </div>
+          </div>
+          <div class="card wide">
+            <h2>Performance Overview</h2>
+            <canvas id="teamComboChart"></canvas>
+          </div>
+          <div class="card wide">
+            <h2>Skill Progress</h2>
+            <canvas id="teamStacked"></canvas>
+          </div>
+          <div class="card">
+            <h2>Team Details</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Ada Lovelace</td><td>Consultant</td><td>Active</td></tr>
+                <tr><td>Grace Hopper</td><td>Manager</td><td>Active</td></tr>
+                <tr><td>Alan Turing</td><td>Analyst</td><td>Pending</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
 
         <!-- SETTINGS -->
         <section id="settings" class="page">
@@ -1108,11 +1229,12 @@
       function show(pageId) {
         pages.forEach((p) => p.classList.toggle("active", p.id === pageId));
         document
-          .querySelectorAll(".nav a")
+          .querySelectorAll(".nav a, .admin-link")
           .forEach((a) =>
             a.classList.toggle("active", a.dataset.page === pageId)
           );
         if (pageId === "performance") requestAnimationFrame(drawAllCharts);
+        if (pageId === "team") requestAnimationFrame(drawTeamCharts);
       }
 
       wireDataPageLinks();
@@ -1324,6 +1446,78 @@
         labels.forEach((t, i) => ctx.fillText(t, X(i) - 8, h - 2));
       }
 
+      function comboBarLineChart(
+        canvas,
+        labels,
+        barData,
+        lineData,
+        barColor,
+        lineColor,
+        barMax = 100,
+        lineMax = 100
+      ) {
+        const { ctx, w, h } = prepareCanvas(canvas);
+        const area = grid(ctx, w, h);
+        const bw = ((area.right - area.left) / labels.length) * 0.6;
+        labels.forEach((t, i) => {
+          const x =
+            area.left +
+            ((i + 0.5) * (area.right - area.left)) / labels.length -
+            bw / 2;
+          const y =
+            area.bottom -
+            (barData[i] / barMax) * (area.bottom - area.top);
+          const barH = area.bottom - y;
+          const r = 8;
+          ctx.fillStyle = barColor;
+          ctx.beginPath();
+          ctx.moveTo(x, y + r);
+          ctx.arcTo(x, y, x + r, y, r);
+          ctx.lineTo(x + bw - r, y);
+          ctx.arcTo(x + bw, y, x + bw, y + r, r);
+          ctx.lineTo(x + bw, y + barH);
+          ctx.lineTo(x, y + barH);
+          ctx.closePath();
+          ctx.fill();
+        });
+        const X = (i) =>
+          area.left + (i / (labels.length - 1)) * (area.right - area.left);
+        const Y = (v) =>
+          area.bottom - (v / lineMax) * (area.bottom - area.top);
+        ctx.beginPath();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = lineColor;
+        ctx.moveTo(X(0), Y(lineData[0]));
+        for (let i = 1; i < lineData.length; i++)
+          ctx.lineTo(X(i), Y(lineData[i]));
+        ctx.stroke();
+      }
+
+      function stackedProgressBarChart(
+        canvas,
+        labels,
+        data,
+        colors,
+        max = 100
+      ) {
+        const { ctx, w, h } = prepareCanvas(canvas);
+        const barH = h / (labels.length * 2);
+        const totalW = w - 60;
+        labels.forEach((label, i) => {
+          const y = (i * 2 + 0.5) * barH;
+          let x = 40;
+          data[i].forEach((val, j) => {
+            const segmentW = (val / max) * totalW;
+            ctx.fillStyle = colors[j % colors.length];
+            ctx.fillRect(x, y, segmentW, barH);
+            x += segmentW;
+          });
+          ctx.fillStyle = "#6B7280";
+          ctx.font = "12px system-ui, -apple-system, Segoe UI, Arial";
+          ctx.fillText(label, 0, y + barH * 0.75);
+        });
+      }
+
       function drawAllCharts() {
         const pr = document.getElementById("projReviewsChart");
         const sp = document.getElementById("skillPracticeChart");
@@ -1356,6 +1550,34 @@
             BRAND.green,
             100,
             5
+          );
+      }
+
+      function drawTeamCharts() {
+        const combo = document.getElementById("teamComboChart");
+        const stacked = document.getElementById("teamStacked");
+        if (combo)
+          comboBarLineChart(
+            combo,
+            ["Q1", "Q2", "Q3", "Q4"],
+            [5, 6, 7, 6],
+            [60, 65, 70, 75],
+            BRAND.green,
+            BRAND.blue,
+            10,
+            100
+          );
+        if (stacked)
+          stackedProgressBarChart(
+            stacked,
+            ["Alpha", "Beta", "Gamma"],
+            [
+              [40, 30, 30],
+              [25, 50, 25],
+              [30, 20, 50],
+            ],
+            [BRAND.green, BRAND.yellow, BRAND.red],
+            100
           );
       }
 
