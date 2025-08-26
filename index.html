@@ -139,16 +139,14 @@
         background: rgba(255, 255, 255, 0.08);
         color: #fff;
       }
-      .nav a .ico,
-      .admin-link .ico {
+      .nav a .ico {
         width: 18px;
         height: 18px;
         stroke: currentColor;
         stroke-width: 1.8;
         fill: none;
       }
-      .nav a .label,
-      .admin-link .label {
+      .nav a .label {
         white-space: nowrap;
       }
       .nav a.active {
@@ -172,15 +170,13 @@
       }
       body.sidebar-collapsed .brand .brand-logo,
       body.sidebar-collapsed .nav a .label,
-      body.sidebar-collapsed .admin-header,
-      body.sidebar-collapsed .admin-link .label {
+      body.sidebar-collapsed .admin-header {
         display: none;
       }
       body.sidebar-collapsed .brand {
         padding: 18px 16px;
       }
-      body.sidebar-collapsed .nav a,
-      body.sidebar-collapsed .admin-link {
+      body.sidebar-collapsed .nav a {
         justify-content: center;
         color: #e5edff;
       }
@@ -609,30 +605,34 @@
 
       /* --- Admin Center --- */
       .admin-block {
-        padding: 8px 8px 16px 8px;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: auto;
+        padding-top: 12px;
       }
       .admin-header {
+        display: inline-block;
+        background: #f29d23;
+        color: #12203a;
+        padding: 2px 6px;
+        border-radius: 6px;
+        font-weight: 600;
         font-size: 12px;
-        text-transform: uppercase;
-        margin: 0 0 8px 8px;
-        color: #9eb1d9;
       }
-      .admin-link {
+      .admin-block .sidebar-item {
+        position: relative;
         display: flex;
         align-items: center;
-        gap: 10px;
         padding: 10px 12px;
         margin: 6px 8px;
         border-radius: 10px;
         color: #dce6ff;
         text-decoration: none;
+        padding-left: 32px;
       }
-      .admin-link:hover {
+      .admin-block .sidebar-item:hover {
         background: rgba(255, 255, 255, 0.08);
         color: #fff;
       }
-      .admin-link.active {
+      .admin-block .sidebar-item.active {
         background: rgba(255, 255, 255, 0.1);
         color: #fff;
       }
@@ -739,16 +739,8 @@
           </a>
         </nav>
         <div class="admin-block">
-          <div class="admin-header">Admin Center</div>
-          <a href="#team" data-page="team" class="admin-link">
-            <svg class="ico" viewBox="0 0 24 24">
-              <path d="M9 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-2" />
-              <path d="M9 2v4h6V2" />
-              <path d="M9 9h6" />
-              <path d="M9 13h6" />
-            </svg>
-            <span class="label">Team Dashboard</span>
-          </a>
+          <span class="admin-header">ADMIN CENTER</span>
+          <a href="#team" data-page="team" class="sidebar-item">Team Dashboard</a>
         </div>
       </aside>
 
@@ -1277,7 +1269,7 @@
       function show(pageId) {
         pages.forEach((p) => p.classList.toggle("active", p.id === pageId));
         document
-          .querySelectorAll(".nav a, .admin-link")
+          .querySelectorAll(".nav a, .admin-block .sidebar-item")
           .forEach((a) =>
             a.classList.toggle("active", a.dataset.page === pageId)
           );
