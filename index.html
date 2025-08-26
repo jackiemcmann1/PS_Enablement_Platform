@@ -1607,10 +1607,12 @@
           );
       }
 
-      // Redraw on resize (if on Performance)
+      // Redraw on resize (if on Performance or Team)
       window.addEventListener("resize", () => {
         if (document.querySelector("#performance.page.active"))
           requestAnimationFrame(drawAllCharts);
+        if (document.querySelector("#team.page.active"))
+          requestAnimationFrame(drawTeamCharts);
       });
     </script>
   </body>
