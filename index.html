@@ -139,14 +139,16 @@
         background: rgba(255, 255, 255, 0.08);
         color: #fff;
       }
-      .nav a .ico {
+      .nav a .ico,
+      .admin-link .ico {
         width: 18px;
         height: 18px;
         stroke: currentColor;
         stroke-width: 1.8;
         fill: none;
       }
-      .nav a .label {
+      .nav a .label,
+      .admin-link .label {
         white-space: nowrap;
       }
       .nav a.active {
@@ -169,13 +171,16 @@
         --sidebar: 72px;
       }
       body.sidebar-collapsed .brand .brand-logo,
-      body.sidebar-collapsed .nav a .label {
+      body.sidebar-collapsed .nav a .label,
+      body.sidebar-collapsed .admin-header,
+      body.sidebar-collapsed .admin-link .label {
         display: none;
       }
       body.sidebar-collapsed .brand {
         padding: 18px 16px;
       }
-      body.sidebar-collapsed .nav a {
+      body.sidebar-collapsed .nav a,
+      body.sidebar-collapsed .admin-link {
         justify-content: center;
         color: #e5edff;
       }
@@ -614,7 +619,9 @@
         color: #9eb1d9;
       }
       .admin-link {
-        display: block;
+        display: flex;
+        align-items: center;
+        gap: 10px;
         padding: 10px 12px;
         margin: 6px 8px;
         border-radius: 10px;
@@ -728,7 +735,15 @@
         </nav>
         <div class="admin-block">
           <div class="admin-header">Admin Center</div>
-          <a href="#team" data-page="team" class="admin-link">Team Dashboard</a>
+          <a href="#team" data-page="team" class="admin-link">
+            <svg class="ico" viewBox="0 0 24 24">
+              <path d="M9 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-2" />
+              <path d="M9 2v4h6V2" />
+              <path d="M9 9h6" />
+              <path d="M9 13h6" />
+            </svg>
+            <span class="label">Team Dashboard</span>
+          </a>
         </div>
       </aside>
 
