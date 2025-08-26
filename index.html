@@ -1582,17 +1582,19 @@
       function drawTeamCharts() {
         const combo = document.getElementById("teamComboChart");
         const stacked = document.getElementById("teamStacked");
-        if (combo)
+        if (combo) {
+          const style = getComputedStyle(document.documentElement);
           comboBarLineChart(
             combo,
-            ["Q1", "Q2", "Q3", "Q4"],
-            [5, 6, 7, 6],
-            [60, 65, 70, 75],
-            BRAND.green,
-            BRAND.blue,
-            10,
+            ["Alex", "Priya", "Marcus", "Hannah", "Diego", "Zoë"],
+            [17, 12, 15, 9, 11, 18],
+            [86, 78, 92, 81, 74, 95],
+            style.getPropertyValue("--accent-yellow").trim(),
+            style.getPropertyValue("--accent-blue").trim(),
+            20,
             100
           );
+        }
         if (stacked)
           stackedProgressBarChart(
             stacked,
