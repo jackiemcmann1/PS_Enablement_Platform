@@ -249,7 +249,6 @@
       .search input {
         flex: 1;
         border: none;
-        outline: none;
         font-size: 16px;
         padding: 6px 4px;
       }
@@ -484,7 +483,6 @@
         border: 1px solid #e5e7eb;
         border-radius: 999px;
         padding: 10px 14px;
-        outline: none;
       }
       .room-actions {
         display: flex;
@@ -575,12 +573,12 @@
 }
 .cta:hover{
   background:var(--accent-yellow);
-  color:var(--white);
+  color:var(--primary);
   border:3px solid var(--accent-yellow);
 }
 .cta.cta-sm{ font-size:14px; height:36px; padding:0 18px; }
 .cta.overview{background:var(--white);color:var(--primary);border:3px solid var(--accent-yellow);}
-.cta.overview:hover{background:var(--accent-yellow);color:var(--white);border:3px solid var(--accent-yellow);}
+.cta.overview:hover{background:var(--accent-yellow);color:var(--primary);border:3px solid var(--accent-yellow);}
 /* --- Content Center --- */
 .content-grid {
   display:grid;
@@ -685,8 +683,19 @@
         display: block;
       }
 
-    </style>
-  </head>
+      /* Focus outlines for interactive elements */
+      a:focus-visible,
+      button:focus-visible,
+      input:focus-visible,
+      select:focus-visible,
+      textarea:focus-visible,
+      [tabindex]:focus-visible {
+        outline: 2px solid var(--accent-yellow);
+        outline-offset: 2px;
+      }
+
+      </style>
+    </head>
   <body>
     <div class="app">
       <!-- Sidebar -->
@@ -1047,7 +1056,7 @@
           <div style="display:flex; gap:12px; align-items:center; justify-content:space-between; margin-bottom:18px;">
             <a href="#" class="subtle">View more courses</a>
             <div style="display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #E5E7EB; padding:6px 10px; border-radius:8px;">
-              <input type="text" placeholder="Search" style="border:none; outline:none; font-size:14px;" />
+              <input type="text" placeholder="Search" style="border:none; font-size:14px;" />
               🔍
             </div>
           </div>
@@ -1108,7 +1117,7 @@
           <p class="subtle" style="margin-bottom:18px">Videos, guides, and templates to support your consulting journey.</p>
         <!-- Search bar (same as Learning Center) -->
 <div style="display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #E5E7EB; padding:6px 10px; border-radius:8px; margin-bottom:18px;">
-  <input type="text" placeholder="Search resources…" style="border:none; outline:none; font-size:14px;" />
+  <input type="text" placeholder="Search resources…" style="border:none; font-size:14px;" />
   🔍
 </div>
 
@@ -1258,11 +1267,11 @@
             </div>
             <div class="card">
               <h2>Practice Activity &amp; Scores</h2>
-              <canvas id="teamComboChart"></canvas>
+              <canvas id="teamComboChart" aria-label="Practice activity chart"></canvas>
             </div>
             <div class="card" style="grid-column: 1 / -1">
               <h2>Course Progress</h2>
-              <canvas id="teamStacked"></canvas>
+              <canvas id="teamStacked" aria-label="Course progress chart"></canvas>
             </div>
             <div class="card" style="grid-column: 1 / -1">
               <h2>Team Details</h2>
