@@ -1264,7 +1264,8 @@
             a.classList.toggle("active", a.dataset.page === pageId)
           );
         if (pageId === "performance") requestAnimationFrame(drawAllCharts);
-        if (pageId === "team") requestAnimationFrame(drawTeamCharts);
+        if (pageId === "team")
+          requestAnimationFrame(drawTeamCharts); // draw after layout becomes visible
       }
 
       wireDataPageLinks();
@@ -1583,6 +1584,7 @@
           );
       }
 
+      // Draw Practice Activity combo chart and Course Progress bars
       function drawTeamCharts() {
         const combo = document.getElementById("teamComboChart");
         const stacked = document.getElementById("teamStacked");
@@ -1613,10 +1615,12 @@
           );
       }
 
-      // Redraw on resize (if on Performance)
+      // Redraw charts on resize for active sections
       window.addEventListener("resize", () => {
         if (document.querySelector("#performance.page.active"))
           requestAnimationFrame(drawAllCharts);
+        if (location.hash === "#team")
+          requestAnimationFrame(drawTeamCharts);
       });
     </script>
   </body>
