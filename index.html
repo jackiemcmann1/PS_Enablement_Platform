@@ -640,16 +640,22 @@
       /* --- Team Dashboard --- */
       #team .filters-row {
         display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-bottom: 16px;
         align-items: center;
-      }
-      #team .filters-row select {
-        padding: 8px 10px;
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
+        gap: 8px;
+        padding: 8px;
+        margin-bottom: 16px;
         background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+      }
+      #team .filters-row input,
+      #team .filters-row select {
+        border: none;
+        background: transparent;
+        padding: 0;
+      }
+      .ml-auto {
+        margin-left: auto;
       }
       .link-like {
         color: var(--accent-blue);
@@ -1179,13 +1185,25 @@
         <section id="team" class="page">
           <h1>Team Dashboard</h1>
           <div class="filters-row">
-            <select>
-              <option>All Regions</option>
+            <select id="teamFilter" aria-label="Team filter">
+              <option>All Teams</option>
+              <option>Strategy</option>
+              <option>Delivery</option>
+              <option>Advisory</option>
             </select>
-            <select>
-              <option>All Roles</option>
-            </select>
-            <a href="#" class="link-like">Reset</a>
+            <input
+              id="dateRange"
+              type="text"
+              value="Q3 · Jul 1 – Sep 30"
+              aria-label="Date range input"
+            />
+            <input
+              id="memberSearch"
+              type="text"
+              placeholder="Name or Leader…"
+              class="ml-auto"
+              aria-label="Search team members"
+            />
           </div>
           <div class="card-grid">
             <div class="card">
