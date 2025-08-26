@@ -657,16 +657,19 @@
         text-decoration: underline;
         font-size: 14px;
       }
-      .kpi-grid {
+      #team .card-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
         gap: 16px;
         margin-bottom: 20px;
       }
-      .kpi-grid .kpi {
-        font-size: 28px;
-        font-weight: 700;
-        margin-top: 4px;
+      #team .card-grid .wide {
+        grid-column: 1 / -1;
+      }
+      @media (max-width: 980px) {
+        #team .card-grid {
+          grid-template-columns: 1fr;
+        }
       }
       #team .card canvas {
         width: 100%;
@@ -1188,44 +1191,49 @@
             </select>
             <a href="#" class="link-like">Reset</a>
           </div>
-          <div class="kpi-grid">
+          <div class="card-grid">
             <div class="card">
-              <h2>Total Members</h2>
-              <div class="kpi">24</div>
+              <h2>Certifications Summary</h2>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Certification</th>
+                    <th>Certified</th>
+                    <th>In Progress</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>AWS</td><td>5</td><td>2</td></tr>
+                  <tr><td>Azure</td><td>3</td><td>1</td></tr>
+                  <tr><td>GCP</td><td>2</td><td>4</td></tr>
+                </tbody>
+              </table>
             </div>
             <div class="card">
-              <h2>Active</h2>
-              <div class="kpi">18</div>
+              <h2>Practice Activity & Scores</h2>
+              <canvas id="teamComboChart"></canvas>
             </div>
-            <div class="card">
-              <h2>Pending</h2>
-              <div class="kpi">6</div>
+            <div class="card wide">
+              <h2>Course Progress</h2>
+              <canvas id="teamCourseProgress"></canvas>
             </div>
-          </div>
-          <div class="card wide">
-            <h2>Performance Overview</h2>
-            <canvas id="teamComboChart"></canvas>
-          </div>
-          <div class="card wide">
-            <h2>Skill Progress</h2>
-            <canvas id="teamStacked"></canvas>
-          </div>
-          <div class="card">
-            <h2>Team Details</h2>
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Role</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>Ada Lovelace</td><td>Consultant</td><td>Active</td></tr>
-                <tr><td>Grace Hopper</td><td>Manager</td><td>Active</td></tr>
-                <tr><td>Alan Turing</td><td>Analyst</td><td>Pending</td></tr>
-              </tbody>
-            </table>
+            <div class="card wide">
+              <h2>Team Detail</h2>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Ada Lovelace</td><td>Consultant</td><td>Active</td></tr>
+                  <tr><td>Grace Hopper</td><td>Manager</td><td>Active</td></tr>
+                  <tr><td>Alan Turing</td><td>Analyst</td><td>Pending</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </section>
 
@@ -1581,7 +1589,7 @@
 
       function drawTeamCharts() {
         const combo = document.getElementById("teamComboChart");
-        const stacked = document.getElementById("teamStacked");
+        const course = document.getElementById("teamCourseProgress");
         if (combo)
           comboBarLineChart(
             combo,
@@ -1593,9 +1601,9 @@
             10,
             100
           );
-        if (stacked)
+        if (course)
           stackedProgressBarChart(
-            stacked,
+            course,
             ["Alpha", "Beta", "Gamma"],
             [
               [40, 30, 30],
