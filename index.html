@@ -311,6 +311,12 @@
         font-weight: 600;
       }
 
+      .num-cell {
+        color: #5280bc;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
       .bars {
         display: flex;
         align-items: flex-end;
@@ -1194,14 +1200,41 @@
                 <thead>
                   <tr>
                     <th>Certification</th>
-                    <th>Members</th>
-                    <th>Completed</th>
+                    <th># Certified</th>
+                    <th># In Progress</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td>AWS</td><td>10</td><td>7</td></tr>
-                  <tr><td>Azure</td><td>8</td><td>5</td></tr>
-                  <tr><td>GCP</td><td>6</td><td>4</td></tr>
+                  <tr>
+                    <td>AWS Cloud Practitioner</td>
+                    <td class="num-cell">15</td>
+                    <td class="num-cell">3</td>
+                  </tr>
+                  <tr>
+                    <td>Azure Fundamentals</td>
+                    <td class="num-cell">12</td>
+                    <td class="num-cell">4</td>
+                  </tr>
+                  <tr>
+                    <td>Google Cloud Associate</td>
+                    <td class="num-cell">10</td>
+                    <td class="num-cell">2</td>
+                  </tr>
+                  <tr>
+                    <td>Security+</td>
+                    <td class="num-cell">8</td>
+                    <td class="num-cell">1</td>
+                  </tr>
+                  <tr>
+                    <td>PMP</td>
+                    <td class="num-cell">5</td>
+                    <td class="num-cell">2</td>
+                  </tr>
+                  <tr>
+                    <td>Salesforce Admin</td>
+                    <td class="num-cell">7</td>
+                    <td class="num-cell">3</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -1215,20 +1248,84 @@
             </div>
             <div class="card" style="grid-column: 1 / -1">
               <h2>Team Details</h2>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Role</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td>Ada Lovelace</td><td>Consultant</td><td>Active</td></tr>
-                  <tr><td>Grace Hopper</td><td>Manager</td><td>Active</td></tr>
-                  <tr><td>Alan Turing</td><td>Analyst</td><td>Pending</td></tr>
-                </tbody>
-              </table>
+              <div style="overflow-x:auto;">
+                <table style="font-size:14px;">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Team</th>
+                      <th>Avg Skill Score</th>
+                      <th>Practices</th>
+                      <th>Certifications</th>
+                      <th>Completed Courses</th>
+                      <th>Last sign-in</th>
+                      <th># sign-ins</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Alex</td>
+                      <td>Alpha</td>
+                      <td>86</td>
+                      <td>17</td>
+                      <td>3</td>
+                      <td>5</td>
+                      <td>2024-07-12</td>
+                      <td>14</td>
+                    </tr>
+                    <tr>
+                      <td>Priya</td>
+                      <td>Beta</td>
+                      <td>78</td>
+                      <td>12</td>
+                      <td>2</td>
+                      <td>4</td>
+                      <td>2024-07-10</td>
+                      <td>10</td>
+                    </tr>
+                    <tr>
+                      <td>Marcus</td>
+                      <td>Gamma</td>
+                      <td>92</td>
+                      <td>15</td>
+                      <td>4</td>
+                      <td>6</td>
+                      <td>2024-07-09</td>
+                      <td>12</td>
+                    </tr>
+                    <tr>
+                      <td>Hannah</td>
+                      <td>Alpha</td>
+                      <td>81</td>
+                      <td>9</td>
+                      <td>1</td>
+                      <td>3</td>
+                      <td>2024-07-08</td>
+                      <td>8</td>
+                    </tr>
+                    <tr>
+                      <td>Diego</td>
+                      <td>Beta</td>
+                      <td>74</td>
+                      <td>11</td>
+                      <td>2</td>
+                      <td>2</td>
+                      <td>2024-07-11</td>
+                      <td>9</td>
+                    </tr>
+                    <tr>
+                      <td>Zoë</td>
+                      <td>Gamma</td>
+                      <td>95</td>
+                      <td>18</td>
+                      <td>5</td>
+                      <td>7</td>
+                      <td>2024-07-13</td>
+                      <td>15</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </section>
