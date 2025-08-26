@@ -105,14 +105,17 @@
       .brand {
         display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 18px 20px;
+        gap: 14px;
+        padding: 22px 24px;
         font-weight: 700;
         letter-spacing: 0.2px;
       }
       .brand-label {
         white-space: nowrap;
         color: #fff;
+      }
+      .brand-logo {
+        height: 32px;
       }
 
       /* ===== Nav ===== */
@@ -163,7 +166,7 @@
       body.sidebar-collapsed {
         --sidebar: 72px;
       }
-      body.sidebar-collapsed .brand .brand-label,
+      body.sidebar-collapsed .brand .brand-logo,
       body.sidebar-collapsed .nav a .label {
         display: none;
       }
@@ -679,7 +682,7 @@
               />
             </svg>
           </button>
-          <div class="brand-label">The Consultant's Way</div>
+          <img src="assets/TCW Logo White.png" alt="The Consultant's Way" class="brand-logo" />
         </div>
         <nav class="nav">
           <a href="#dashboard" data-page="dashboard" class="active">
