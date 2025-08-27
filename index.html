@@ -1266,7 +1266,7 @@
               </table>
             </div>
             <div class="card">
-              <h2>Practice Activity &amp; Scores</h2>
+              <h2>Skill Practice Activity</h2>
               <canvas id="teamComboChart" aria-label="Practice activity chart"></canvas>
             </div>
             <div class="card" style="grid-column: 1 / -1">
@@ -1646,6 +1646,16 @@
         for (let i = 1; i < lineData.length; i++)
           ctx.lineTo(X(i), Y(lineData[i]));
         ctx.stroke();
+
+        // X-axis labels
+        ctx.fillStyle = "#6B7280";
+        ctx.font = "12px system-ui, -apple-system, Segoe UI, Arial";
+        labels.forEach((t, i) => {
+          const x =
+            area.left +
+            ((i + 0.5) * (area.right - area.left)) / labels.length;
+          ctx.fillText(t, x - 8, h - 2);
+        });
       }
 
       function stackedProgressBarChart(
@@ -1716,11 +1726,18 @@
           const style = getComputedStyle(document.documentElement);
           comboBarLineChart(
             combo,
-            ["Alex", "Priya", "Marcus", "Hannah", "Diego", "Zoë"],
+            [
+              "Week 12",
+              "Week 13",
+              "Week 14",
+              "Week 15",
+              "Week 16",
+              "Week 17",
+            ],
             [17, 12, 15, 9, 11, 18],
             [86, 78, 92, 81, 74, 95],
             style.getPropertyValue("--accent-yellow").trim(),
-            style.getPropertyValue("--accent-blue").trim(),
+            style.getPropertyValue("--primary").trim(),
             20,
             100
           );
