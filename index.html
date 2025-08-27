@@ -1408,6 +1408,8 @@
           // If currently on Performance, redraw to fit new width
           if (document.querySelector("#performance.page.active"))
             requestAnimationFrame(drawAllCharts);
+          if (document.querySelector("#team.page.active"))
+            requestAnimationFrame(drawTeamCharts);
         });
 
       // ---- Tiny chart drawer (Canvas 2D) ----
