@@ -1388,9 +1388,8 @@
           .forEach((a) =>
             a.classList.toggle("active", a.dataset.page === pageId)
           );
-        if (pageId === "performance") requestAnimationFrame(drawAllCharts);
-        if (pageId === "team")
-          requestAnimationFrame(drawTeamCharts); // draw after layout becomes visible
+        if (pageId === "performance") drawAllCharts();
+        if (pageId === "team") drawTeamCharts();
       }
 
       wireDataPageLinks();
@@ -1407,419 +1406,258 @@
           document.body.classList.toggle("sidebar-collapsed");
           // If currently on Performance, redraw to fit new width
           if (document.querySelector("#performance.page.active"))
-            requestAnimationFrame(drawAllCharts);
+            drawAllCharts();
         });
 
-      // ---- Tiny chart drawer (Canvas 2D) ----
+      // ---- Chart.js helpers ----
       const BRAND = {
         blue: "#5280BC",
         green: "#42BA7D",
         yellow: "#F29D0E",
         red: "#CC2836",
-        grid: "#EEF2F7",
-        axis: "#E5E7EB",
       };
 
-      function dpr() {
-        return window.devicePixelRatio || 1;
-      }
-
-      function prepareCanvas(canvas) {
-        const rect = canvas.getBoundingClientRect();
-        const ratio = dpr();
-        canvas.width = Math.max(300, rect.width * ratio);
-        canvas.height = Math.max(160, rect.height * ratio);
+      function destroyChart(canvas) {
+        const existing = Chart.getChart(canvas);
+        if (existing) existing.destroy();
         const ctx = canvas.getContext("2d");
-        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-        return { ctx, w: rect.width, h: rect.height };
-      }
-
-      function grid(
-        ctx,
-        w,
-        h,
-        left = 40,
-        rightPad = 12,
-        top = 12,
-        bottomPad = 16
-      ) {
-        ctx.strokeStyle = BRAND.grid;
-        ctx.lineWidth = 1;
-        for (let i = 0; i <= 4; i++) {
-          const y = top + (h - top - bottomPad) * (i / 4);
-          ctx.beginPath();
-          ctx.moveTo(left, y);
-          ctx.lineTo(w - rightPad, y);
-          ctx.stroke();
-        }
-        ctx.strokeStyle = BRAND.axis;
-        ctx.beginPath();
-        ctx.moveTo(left, top);
-        ctx.lineTo(left, h - bottomPad);
-        ctx.stroke();
-        return { left, right: w - rightPad, top, bottom: h - bottomPad };
-      }
-
-      function lineChart(
-        canvas,
-        labels,
-        data,
-        color,
-        yMin = 0,
-        yMax = 100,
-        fill = true
-      ) {
-        const { ctx, w, h } = prepareCanvas(canvas);
-        const area = grid(ctx, w, h);
-        const X = (i) =>
-          area.left + (i / (labels.length - 1)) * (area.right - area.left);
-        const Y = (v) =>
-          area.bottom - ((v - yMin) / (yMax - yMin)) * (area.bottom - area.top);
-
-        if (fill) {
-          ctx.beginPath();
-          ctx.moveTo(X(0), Y(data[0]));
-          for (let i = 1; i < data.length; i++) ctx.lineTo(X(i), Y(data[i]));
-          ctx.lineTo(X(data.length - 1), area.bottom);
-          ctx.lineTo(X(0), area.bottom);
-          ctx.closePath();
-          ctx.fillStyle = color + "22";
-          ctx.fill();
-        }
-
-        ctx.beginPath();
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = color;
-        ctx.moveTo(X(0), Y(data[0]));
-        for (let i = 1; i < data.length; i++) ctx.lineTo(X(i), Y(data[i]));
-        ctx.stroke();
-
-        ctx.fillStyle = color;
-        data.forEach((v, i) => {
-          ctx.beginPath();
-          ctx.arc(X(i), Y(v), 3, 0, Math.PI * 2);
-          ctx.fill();
-        });
-
-        ctx.fillStyle = "#6B7280";
-        ctx.font = "12px system-ui, -apple-system, Segoe UI, Arial";
-        labels.forEach((t, i) => ctx.fillText(t, X(i) - 8, h - 2));
-      }
-
-      function barChart(canvas, labels, data, colors, yMax = 100) {
-        const { ctx, w, h } = prepareCanvas(canvas);
-        const area = grid(ctx, w, h);
-        const bw = ((area.right - area.left) / labels.length) * 0.6;
-        labels.forEach((t, i) => {
-          const x =
-            area.left +
-            ((i + 0.5) * (area.right - area.left)) / labels.length -
-            bw / 2;
-          const y = area.bottom - (data[i] / yMax) * (area.bottom - area.top);
-          const r = 8;
-          ctx.fillStyle = colors[i] || BRAND.blue;
-          const barH = area.bottom - y;
-          ctx.beginPath();
-          ctx.moveTo(x, y + r);
-          ctx.arcTo(x, y, x + r, y, r);
-          ctx.lineTo(x + bw - r, y);
-          ctx.arcTo(x + bw, y, x + bw, y + r, r);
-          ctx.lineTo(x + bw, y + barH);
-          ctx.lineTo(x, y + barH);
-          ctx.closePath();
-          ctx.fill();
-
-          ctx.fillStyle = "#6B7280";
-          ctx.font = "12px system-ui, -apple-system, Segoe UI, Arial";
-          const label = t.length > 10 ? t.slice(0, 10) + "…" : t;
-          ctx.fillText(label, x, h - 2);
-        });
-      }
-
-      function dualLineChart(
-        canvas,
-        labels,
-        leftData,
-        rightData,
-        leftColor,
-        rightColor,
-        leftMax = 100,
-        rightMax = 5
-      ) {
-        const { ctx, w, h } = prepareCanvas(canvas);
-        const area = grid(ctx, w, h);
-        const X = (i) =>
-          area.left + (i / (labels.length - 1)) * (area.right - area.left);
-        const YL = (v) =>
-          area.bottom - (v / leftMax) * (area.bottom - area.top);
-        const YR = (v) =>
-          area.bottom - (v / rightMax) * (area.bottom - area.top);
-
-        // Left series (utilization) area+line
-        ctx.beginPath();
-        ctx.moveTo(X(0), YL(leftData[0]));
-        for (let i = 1; i < leftData.length; i++)
-          ctx.lineTo(X(i), YL(leftData[i]));
-        ctx.lineTo(X(leftData.length - 1), area.bottom);
-        ctx.lineTo(X(0), area.bottom);
-        ctx.closePath();
-        ctx.fillStyle = leftColor + "22";
-        ctx.fill();
-        ctx.beginPath();
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = leftColor;
-        ctx.moveTo(X(0), YL(leftData[0]));
-        for (let i = 1; i < leftData.length; i++)
-          ctx.lineTo(X(i), YL(leftData[i]));
-        ctx.stroke();
-
-        // Right series (projects) line
-        ctx.beginPath();
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = rightColor;
-        ctx.moveTo(X(0), YR(rightData[0]));
-        for (let i = 1; i < rightData.length; i++)
-          ctx.lineTo(X(i), YR(rightData[i]));
-        ctx.stroke();
-
-        // Points
-        ctx.fillStyle = leftColor;
-        leftData.forEach((v, i) => {
-          ctx.beginPath();
-          ctx.arc(X(i), YL(v), 3, 0, Math.PI * 2);
-          ctx.fill();
-        });
-        ctx.fillStyle = rightColor;
-        rightData.forEach((v, i) => {
-          ctx.beginPath();
-          ctx.arc(X(i), YR(v), 3, 0, Math.PI * 2);
-          ctx.fill();
-        });
-
-        // X labels
-        ctx.fillStyle = "#6B7280";
-        ctx.font = "12px system-ui, -apple-system, Segoe UI, Arial";
-        labels.forEach((t, i) => ctx.fillText(t, X(i) - 8, h - 2));
-      }
-
-      function comboBarLineChart(
-        canvas,
-        labels,
-        barData,
-        lineData,
-        barColor,
-        lineColor,
-        barMax = 100,
-        lineMax = 100
-      ) {
-        const { ctx, w, h } = prepareCanvas(canvas);
-        const area = grid(ctx, w, h);
-        const bw = ((area.right - area.left) / labels.length) * 0.6;
-        labels.forEach((t, i) => {
-          const x =
-            area.left +
-            ((i + 0.5) * (area.right - area.left)) / labels.length -
-            bw / 2;
-          const y =
-            area.bottom -
-            (barData[i] / barMax) * (area.bottom - area.top);
-          const barH = area.bottom - y;
-          const r = 8;
-          ctx.fillStyle = barColor;
-          ctx.beginPath();
-          ctx.moveTo(x, y + r);
-          ctx.arcTo(x, y, x + r, y, r);
-          ctx.lineTo(x + bw - r, y);
-          ctx.arcTo(x + bw, y, x + bw, y + r, r);
-          ctx.lineTo(x + bw, y + barH);
-          ctx.lineTo(x, y + barH);
-          ctx.closePath();
-          ctx.fill();
-        });
-        const X = (i) =>
-          area.left + (i / (labels.length - 1)) * (area.right - area.left);
-        const Y = (v) =>
-          area.bottom - (v / lineMax) * (area.bottom - area.top);
-        ctx.beginPath();
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = lineColor;
-        ctx.moveTo(X(0), Y(lineData[0]));
-        for (let i = 1; i < lineData.length; i++)
-          ctx.lineTo(X(i), Y(lineData[i]));
-        ctx.stroke();
-
-        // X-axis labels
-        ctx.fillStyle = "#6B7280";
-        ctx.font = "12px system-ui, -apple-system, Segoe UI, Arial";
-        labels.forEach((t, i) => {
-          const x =
-            area.left +
-            ((i + 0.5) * (area.right - area.left)) / labels.length;
-          ctx.fillText(t, x - 8, h - 2);
-        });
-      }
-
-      function stackedProgressBarChart(
-        canvas,
-        labels,
-        data,
-        colors,
-        max = 100
-      ) {
-        const { ctx, w, h } = prepareCanvas(canvas);
-        const barH = h / (labels.length * 2);
-        const totalW = w - 60;
-        labels.forEach((label, i) => {
-          const y = (i * 2 + 0.5) * barH;
-          let x = 40;
-          data[i].forEach((val, j) => {
-            const segmentW = (val / max) * totalW;
-            ctx.fillStyle = colors[j % colors.length];
-            ctx.fillRect(x, y, segmentW, barH);
-            x += segmentW;
-          });
-          ctx.fillStyle = "#6B7280";
-          ctx.font = "12px system-ui, -apple-system, Segoe UI, Arial";
-          ctx.fillText(label, 0, y + barH * 0.75);
-        });
+        if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
 
       function drawAllCharts() {
         const pr = document.getElementById("projReviewsChart");
         const sp = document.getElementById("skillPracticeChart");
         const ut = document.getElementById("utilizationChart");
-        if (pr)
-          lineChart(
-            pr,
-            ["Jan", "Feb", "Mar", "Apr"],
-            [85, 90, 88, 92],
-            BRAND.blue,
-            70,
-            100,
-            true
-          );
-        if (sp)
-          barChart(
-            sp,
-            ["Communication", "Leadership", "Technical", "Collaboration"],
-            [80, 75, 90, 85],
-            [BRAND.yellow, BRAND.blue, BRAND.green, BRAND.blue],
-            100
-          );
-        if (ut)
-          dualLineChart(
-            ut,
-            ["Jan", "Feb", "Mar", "Apr"],
-            [65, 72, 80, 76],
-            [2, 3, 4, 3],
-            BRAND.blue,
-            BRAND.green,
-            100,
-            5
-          );
-      }
 
-      // Draw Practice Activity combo chart and Course Progress bars
-      function drawTeamCharts() {
-        const combo = document.getElementById("teamComboChart");
-        const stacked = document.getElementById("teamStacked");
-        if (combo) {
-          const style = getComputedStyle(document.documentElement);
-          const labels = [
-            "Week 12",
-            "Week 13",
-            "Week 14",
-            "Week 15",
-            "Week 16",
-            "Week 17",
-          ];
-          const practicesArray = [17, 12, 15, 9, 11, 18];
-          const avgScoreArray = [86, 78, 92, 81, 74, 95];
-
-          new Chart(combo, {
-            type: "bar",
+        if (pr) {
+          destroyChart(pr);
+          new Chart(pr, {
+            type: "line",
             data: {
-              labels,
+              labels: ["Jan", "Feb", "Mar", "Apr"],
               datasets: [
                 {
-                  label: "Practices",
-                  data: practicesArray,
-                  backgroundColor: style
-                    .getPropertyValue("--accent-yellow")
-                    .trim(),
-                  hoverBackgroundColor: style
-                    .getPropertyValue("--accent-yellow")
-                    .trim(),
-                  hoverBorderColor: style
-                    .getPropertyValue("--accent-yellow")
-                    .trim(),
-                  borderRadius: 6,
-                  yAxisID: "y",
-                },
-                {
-                  type: "line",
-                  order: 2,
-                  label: "Avg Score",
-                  data: avgScoreArray,
-                  borderColor: style.getPropertyValue("--primary").trim(),
-                  backgroundColor: style.getPropertyValue("--primary").trim(),
-                  yAxisID: "y1",
+                  label: "Project Reviews",
+                  data: [85, 90, 88, 92],
+                  borderColor: BRAND.blue,
+                  backgroundColor: BRAND.blue + "22",
+                  fill: true,
                   tension: 0.4,
                   pointRadius: 4,
-                  pointHoverRadius: 4,
-                  pointBackgroundColor: "#fff",
-                  pointHoverBackgroundColor: "#fff",
-                  pointBorderColor: style.getPropertyValue("--primary").trim(),
                 },
               ],
             },
             options: {
               maintainAspectRatio: false,
-              hover: { mode: null },
+              plugins: { legend: { display: false } },
               scales: {
-                x: { type: "category", offset: true },
-                y: { beginAtZero: true, suggestedMax: 20 },
+                y: { beginAtZero: true, suggestedMin: 70, suggestedMax: 100 },
+              },
+            },
+          });
+        }
+
+        if (sp) {
+          destroyChart(sp);
+          new Chart(sp, {
+            type: "bar",
+            data: {
+              labels: [
+                "Communication",
+                "Leadership",
+                "Technical",
+                "Collaboration",
+              ],
+              datasets: [
+                {
+                  label: "Skill Practice",
+                  data: [80, 75, 90, 85],
+                  backgroundColor: [
+                    BRAND.yellow,
+                    BRAND.blue,
+                    BRAND.green,
+                    BRAND.blue,
+                  ],
+                  borderRadius: 6,
+                },
+              ],
+            },
+            options: {
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } },
+              scales: {
+                y: { beginAtZero: true, suggestedMax: 100 },
+              },
+            },
+          });
+        }
+
+        if (ut) {
+          destroyChart(ut);
+          new Chart(ut, {
+            data: {
+              labels: ["Jan", "Feb", "Mar", "Apr"],
+              datasets: [
+                {
+                  type: "line",
+                  label: "Utilization",
+                  data: [65, 72, 80, 76],
+                  borderColor: BRAND.blue,
+                  backgroundColor: BRAND.blue + "22",
+                  fill: true,
+                  tension: 0.4,
+                  yAxisID: "y",
+                  pointRadius: 4,
+                },
+                {
+                  type: "line",
+                  label: "Projects",
+                  data: [2, 3, 4, 3],
+                  borderColor: BRAND.green,
+                  backgroundColor: BRAND.green,
+                  fill: false,
+                  tension: 0.4,
+                  yAxisID: "y1",
+                  pointRadius: 4,
+                },
+              ],
+            },
+            options: {
+              maintainAspectRatio: false,
+              scales: {
+                y: { beginAtZero: true, suggestedMax: 100 },
                 y1: {
                   beginAtZero: true,
-                  suggestedMax: 100,
+                  suggestedMax: 5,
                   position: "right",
                   grid: { drawOnChartArea: false },
-                },
-              },
-              plugins: {
-                legend: { display: true },
-                tooltip: {
-                  callbacks: {
-                    label: (ctx) =>
-                      `${ctx.dataset.label}: ${ctx.parsed.y}${
-                        ctx.dataset.type === "line" ? "%" : ""
-                      }`,
-                  },
                 },
               },
             },
           });
         }
-        if (stacked)
-          stackedProgressBarChart(
-            stacked,
-            ["Alpha", "Beta", "Gamma"],
-            [
-              [40, 30, 30],
-              [25, 50, 25],
-              [30, 20, 50],
-            ],
-            [BRAND.green, BRAND.yellow, BRAND.red],
-            100
-          );
       }
+
+      // Draw Practice Activity combo chart and Course Progress bars
+        function drawTeamCharts() {
+          const combo = document.getElementById("teamComboChart");
+          const stacked = document.getElementById("teamStacked");
+          const style = getComputedStyle(document.documentElement);
+
+          if (combo) {
+            destroyChart(combo);
+            const labels = [
+              "Week 12",
+              "Week 13",
+              "Week 14",
+              "Week 15",
+              "Week 16",
+              "Week 17",
+            ];
+            const practicesArray = [17, 12, 15, 9, 11, 18];
+            const avgScoreArray = [86, 78, 92, 81, 74, 95];
+
+            new Chart(combo, {
+              type: "bar",
+              data: {
+                labels,
+                datasets: [
+                  {
+                    label: "Practices",
+                    data: practicesArray,
+                    backgroundColor: style
+                      .getPropertyValue("--accent-yellow")
+                      .trim(),
+                    borderRadius: 6,
+                    yAxisID: "y",
+                  },
+                  {
+                    type: "line",
+                    order: 2,
+                    label: "Avg Score",
+                    data: avgScoreArray,
+                    borderColor: style.getPropertyValue("--primary").trim(),
+                    backgroundColor: style.getPropertyValue("--primary").trim(),
+                    yAxisID: "y1",
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointBackgroundColor: "#fff",
+                    pointBorderColor: style.getPropertyValue("--primary").trim(),
+                  },
+                ],
+              },
+              options: {
+                maintainAspectRatio: false,
+                hover: { mode: null },
+                scales: {
+                  x: { type: "category", offset: true },
+                  y: { beginAtZero: true, suggestedMax: 20 },
+                  y1: {
+                    beginAtZero: true,
+                    suggestedMax: 100,
+                    position: "right",
+                    grid: { drawOnChartArea: false },
+                  },
+                },
+                plugins: {
+                  legend: { display: true },
+                  tooltip: {
+                    callbacks: {
+                      label: (ctx) =>
+                        `${ctx.dataset.label}: ${ctx.parsed.y}${
+                          ctx.dataset.type === "line" ? "%" : ""
+                        }`,
+                    },
+                  },
+                },
+              },
+            });
+          }
+
+          if (stacked) {
+            destroyChart(stacked);
+            new Chart(stacked, {
+              type: "bar",
+              data: {
+                labels: ["Alpha", "Beta", "Gamma"],
+                datasets: [
+                  {
+                    label: "Green",
+                    data: [40, 25, 30],
+                    backgroundColor: BRAND.green,
+                    stack: "combined",
+                  },
+                  {
+                    label: "Yellow",
+                    data: [30, 50, 20],
+                    backgroundColor: BRAND.yellow,
+                    stack: "combined",
+                  },
+                  {
+                    label: "Red",
+                    data: [30, 25, 50],
+                    backgroundColor: BRAND.red,
+                    stack: "combined",
+                  },
+                ],
+              },
+              options: {
+                indexAxis: "y",
+                maintainAspectRatio: false,
+                scales: {
+                  x: { beginAtZero: true, max: 100, stacked: true },
+                  y: { stacked: true },
+                },
+                plugins: { legend: { display: false }, tooltip: { enabled: false } },
+              },
+            });
+          }
+        }
 
       // Redraw charts on resize for active sections
       window.addEventListener("resize", () => {
-        if (document.querySelector("#performance.page.active"))
-          requestAnimationFrame(drawAllCharts);
-        if (location.hash === "#team")
-          requestAnimationFrame(drawTeamCharts);
+        if (document.querySelector("#performance.page.active")) drawAllCharts();
+        if (location.hash === "#team") drawTeamCharts();
       });
     </script>
   </body>
