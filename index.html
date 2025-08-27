@@ -1273,7 +1273,7 @@
             </div>
             <div class="card" style="grid-column: 1 / -1">
               <h2>Course Progress</h2>
-              <canvas id="teamStacked" aria-label="Course progress chart"></canvas>
+              <canvas id="teamCourseProgress" aria-label="Course progress chart"></canvas>
             </div>
             <div class="card" style="grid-column: 1 / -1">
               <h2>Team Details</h2>
@@ -1664,31 +1664,6 @@
         });
       }
 
-      function stackedProgressBarChart(
-        canvas,
-        labels,
-        data,
-        colors,
-        max = 100
-      ) {
-        const { ctx, w, h } = prepareCanvas(canvas);
-        const barH = h / (labels.length * 2);
-        const totalW = w - 60;
-        labels.forEach((label, i) => {
-          const y = (i * 2 + 0.5) * barH;
-          let x = 40;
-          data[i].forEach((val, j) => {
-            const segmentW = (val / max) * totalW;
-            ctx.fillStyle = colors[j % colors.length];
-            ctx.fillRect(x, y, segmentW, barH);
-            x += segmentW;
-          });
-          ctx.fillStyle = "#6B7280";
-          ctx.font = "12px system-ui, -apple-system, Segoe UI, Arial";
-          ctx.fillText(label, 0, y + barH * 0.75);
-        });
-      }
-
       function drawAllCharts() {
         const pr = document.getElementById("projReviewsChart");
         const sp = document.getElementById("skillPracticeChart");
@@ -1726,10 +1701,11 @@
 
       // Draw Practice Activity combo chart and Course Progress bars
       let teamComboChartInstance;
+      let teamCourseProgressInstance;
 
       function drawTeamCharts() {
         const combo = document.getElementById("teamComboChart");
-        const stacked = document.getElementById("teamStacked");
+        const progressCtx = document.getElementById("teamCourseProgress");
         if (combo) {
           if (teamComboChartInstance) teamComboChartInstance.destroy();
           const style = getComputedStyle(document.documentElement);
@@ -1812,18 +1788,43 @@
             },
           });
         }
-        if (stacked)
-          stackedProgressBarChart(
-            stacked,
-            ["Alpha", "Beta", "Gamma"],
-            [
-              [40, 30, 30],
-              [25, 50, 25],
-              [30, 20, 50],
-            ],
-            [BRAND.green, BRAND.yellow, BRAND.red],
-            100
-          );
+        if (progressCtx) {
+          if (teamCourseProgressInstance) teamCourseProgressInstance.destroy();
+          const labels = [
+            "Alex",
+            "Priya",
+            "Marcus",
+            "Hannah",
+            "Diego",
+            "Zoë",
+          ];
+          const enrollments = [6, 5, 7, 4, 3, 8];
+          const completions = [5, 4, 6, 3, 2, 7];
+          teamCourseProgressInstance = new Chart(progressCtx, {
+            type: "bar",
+            data: {
+              labels,
+              datasets: [
+                {
+                  label: "Count of Enrollments",
+                  data: enrollments,
+                  backgroundColor: BRAND.blue,
+                },
+                {
+                  label: "Count of Completed Enrollments",
+                  data: completions,
+                  backgroundColor: BRAND.yellow,
+                },
+              ],
+            },
+            plugins: [ChartDataLabels],
+            options: {
+              responsive: true,
+              scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } },
+              plugins: { datalabels: { anchor: "end", align: "end" } },
+            },
+          });
+        }
       }
 
       // Redraw charts on resize for active sections
