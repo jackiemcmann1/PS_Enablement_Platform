@@ -1735,6 +1735,9 @@
           ];
           const practicesArray = [17, 12, 15, 9, 11, 18];
           const avgScoreArray = [86, 78, 92, 81, 74, 95];
+          const barColor = style.getPropertyValue("--accent-yellow").trim();
+          const pointColor = "#fff";
+          const radius = 4;
 
           new Chart(combo, {
             type: "bar",
@@ -1744,15 +1747,9 @@
                 {
                   label: "Practices",
                   data: practicesArray,
-                  backgroundColor: style
-                    .getPropertyValue("--accent-yellow")
-                    .trim(),
-                  hoverBackgroundColor: style
-                    .getPropertyValue("--accent-yellow")
-                    .trim(),
-                  hoverBorderColor: style
-                    .getPropertyValue("--accent-yellow")
-                    .trim(),
+                  backgroundColor: barColor,
+                  hoverBackgroundColor: barColor,
+                  hoverBorderColor: barColor,
                   borderRadius: 6,
                   yAxisID: "y",
                 },
@@ -1765,16 +1762,17 @@
                   backgroundColor: style.getPropertyValue("--primary").trim(),
                   yAxisID: "y1",
                   tension: 0.4,
-                  pointRadius: 4,
-                  pointHoverRadius: 4,
-                  pointBackgroundColor: "#fff",
-                  pointHoverBackgroundColor: "#fff",
+                  pointRadius: radius,
+                  pointHoverRadius: radius,
+                  pointBackgroundColor: pointColor,
+                  pointHoverBackgroundColor: pointColor,
                   pointBorderColor: style.getPropertyValue("--primary").trim(),
                 },
               ],
             },
             options: {
               maintainAspectRatio: false,
+              interaction: { mode: null },
               hover: { mode: null },
               scales: {
                 x: { type: "category", offset: true },
