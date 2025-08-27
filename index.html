@@ -1722,10 +1722,13 @@
       }
 
       // Draw Practice Activity combo chart and Course Progress bars
+      let teamComboChartInstance;
+
       function drawTeamCharts() {
         const combo = document.getElementById("teamComboChart");
         const stacked = document.getElementById("teamStacked");
         if (combo) {
+          if (teamComboChartInstance) teamComboChartInstance.destroy();
           const style = getComputedStyle(document.documentElement);
           const labels = [
             "Week 12",
@@ -1741,7 +1744,7 @@
           const pointColor = "#fff";
           const radius = 4;
 
-          new Chart(combo, {
+          teamComboChartInstance = new Chart(combo, {
             type: "bar",
             data: {
               labels,
