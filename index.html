@@ -178,7 +178,11 @@
         display: none;
       }
       body.sidebar-collapsed .brand {
-        padding: 18px 16px;
+        padding: 0;                /* remove asymmetric padding */
+        justify-content: center;   /* center contents */
+      }
+      body.sidebar-collapsed .brand-toggle {
+        margin-left: 0;            /* cancel auto margin */
       }
       body.sidebar-collapsed .nav a,
       body.sidebar-collapsed .admin-link {
