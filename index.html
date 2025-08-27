@@ -1747,6 +1747,12 @@
                   backgroundColor: style
                     .getPropertyValue("--accent-yellow")
                     .trim(),
+                  hoverBackgroundColor: style
+                    .getPropertyValue("--accent-yellow")
+                    .trim(),
+                  hoverBorderColor: style
+                    .getPropertyValue("--accent-yellow")
+                    .trim(),
                   borderRadius: 6,
                   yAxisID: "y",
                 },
@@ -1758,13 +1764,17 @@
                   backgroundColor: style.getPropertyValue("--primary").trim(),
                   yAxisID: "y1",
                   tension: 0.4,
+                  pointRadius: 4,
+                  pointHoverRadius: 4,
                   pointBackgroundColor: "#fff",
+                  pointHoverBackgroundColor: "#fff",
                   pointBorderColor: style.getPropertyValue("--primary").trim(),
                 },
               ],
             },
             options: {
               maintainAspectRatio: false,
+              hover: { mode: null },
               scales: {
                 x: { type: "category", offset: true },
                 y: { beginAtZero: true, suggestedMax: 20 },
