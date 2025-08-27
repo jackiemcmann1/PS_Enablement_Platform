@@ -1733,8 +1733,34 @@
             "Week 16",
             "Week 17",
           ];
-          const practicesArray = [17, 12, 15, 9, 11, 18];
-          const avgScoreArray = [86, 78, 92, 81, 74, 95];
+          const practicesArray = [46, 32, 44, 25, 30, 51];
+          const avgScoreArray = [79, 76, 84, 81, 78, 86];
+
+          const valueLabelPlugin = {
+            id: "valueLabelPlugin",
+            afterDatasetsDraw(chart) {
+              const { ctx } = chart;
+              chart.data.datasets.forEach((dataset, i) => {
+                const meta = chart.getDatasetMeta(i);
+                meta.data.forEach((element, index) => {
+                  ctx.save();
+                  ctx.font = "12px sans-serif";
+                  ctx.fillStyle =
+                    dataset.borderColor || dataset.backgroundColor || "#666";
+                  ctx.textAlign = "center";
+                  ctx.textBaseline = "bottom";
+                  const position = element.tooltipPosition();
+                  const value = dataset.data[index];
+                  const offset =
+                    (dataset.type || chart.config.type) === "line" ? 8 : 2;
+                  ctx.fillText(value, position.x, position.y - offset);
+                  ctx.restore();
+                });
+              });
+            },
+          };
+
+          Chart.register(valueLabelPlugin);
 
           new Chart(combo, {
             type: "bar",
@@ -1742,7 +1768,7 @@
               labels,
               datasets: [
                 {
-                  label: "Practices",
+                  label: "Practices Completed",
                   data: practicesArray,
                   backgroundColor: style
                     .getPropertyValue("--accent-yellow")
@@ -1752,7 +1778,7 @@
                 },
                 {
                   type: "line",
-                  label: "Avg Score",
+                  label: "Avg Score (%)",
                   data: avgScoreArray,
                   borderColor: style.getPropertyValue("--primary").trim(),
                   backgroundColor: style.getPropertyValue("--primary").trim(),
