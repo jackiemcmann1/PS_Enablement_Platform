@@ -1267,7 +1267,7 @@
             </div>
             <div class="card">
               <h2>Skill Practice Activity</h2>
-              <canvas id="teamComboChart" aria-label="Practice activity chart"></canvas>
+              <canvas id="teamComboChart" aria-label="Practice activity chart" style="height:260px"></canvas>
             </div>
             <div class="card" style="grid-column: 1 / -1">
               <h2>Course Progress</h2>
@@ -1365,6 +1365,7 @@
       </main>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
       // ---- Routing (works for nav, topbar, and any [data-page]) ----
       function wireDataPageLinks(scope = document) {
@@ -1724,23 +1725,69 @@
         const stacked = document.getElementById("teamStacked");
         if (combo) {
           const style = getComputedStyle(document.documentElement);
-          comboBarLineChart(
-            combo,
-            [
-              "Week 12",
-              "Week 13",
-              "Week 14",
-              "Week 15",
-              "Week 16",
-              "Week 17",
-            ],
-            [17, 12, 15, 9, 11, 18],
-            [86, 78, 92, 81, 74, 95],
-            style.getPropertyValue("--accent-yellow").trim(),
-            style.getPropertyValue("--primary").trim(),
-            20,
-            100
-          );
+          const labels = [
+            "Week 12",
+            "Week 13",
+            "Week 14",
+            "Week 15",
+            "Week 16",
+            "Week 17",
+          ];
+          const practicesArray = [17, 12, 15, 9, 11, 18];
+          const avgScoreArray = [86, 78, 92, 81, 74, 95];
+
+          new Chart(combo, {
+            type: "bar",
+            data: {
+              labels,
+              datasets: [
+                {
+                  label: "Practices",
+                  data: practicesArray,
+                  backgroundColor: style
+                    .getPropertyValue("--accent-yellow")
+                    .trim(),
+                  borderRadius: 6,
+                  yAxisID: "y",
+                },
+                {
+                  type: "line",
+                  label: "Avg Score",
+                  data: avgScoreArray,
+                  borderColor: style.getPropertyValue("--primary").trim(),
+                  backgroundColor: style.getPropertyValue("--primary").trim(),
+                  yAxisID: "y1",
+                  tension: 0.4,
+                  pointBackgroundColor: "#fff",
+                  pointBorderColor: style.getPropertyValue("--primary").trim(),
+                },
+              ],
+            },
+            options: {
+              maintainAspectRatio: false,
+              scales: {
+                x: { type: "category", offset: true },
+                y: { beginAtZero: true, suggestedMax: 20 },
+                y1: {
+                  beginAtZero: true,
+                  suggestedMax: 100,
+                  position: "right",
+                  grid: { drawOnChartArea: false },
+                },
+              },
+              plugins: {
+                legend: { display: true },
+                tooltip: {
+                  callbacks: {
+                    label: (ctx) =>
+                      `${ctx.dataset.label}: ${ctx.parsed.y}${
+                        ctx.dataset.type === "line" ? "%" : ""
+                      }`,
+                  },
+                },
+              },
+            },
+          });
         }
         if (stacked)
           stackedProgressBarChart(
