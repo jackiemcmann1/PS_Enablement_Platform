@@ -1368,6 +1368,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
     <script>
       // ---- Routing (works for nav, topbar, and any [data-page]) ----
       function wireDataPageLinks(scope = document) {
@@ -1777,6 +1778,7 @@
                 },
               ],
             },
+            plugins: [ChartDataLabels],
             options: {
               maintainAspectRatio: false,
               interaction: { mode: null },
@@ -1800,6 +1802,10 @@
                         ctx.dataset.type === "line" ? "%" : ""
                       }`,
                   },
+                },
+                datalabels: {
+                  align: "top",
+                  formatter: (value) => value,
                 },
               },
             },
