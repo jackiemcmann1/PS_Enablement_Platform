@@ -320,38 +320,22 @@
         background: #f9fafb;
         border: 1px solid #e5e7eb;
         border-collapse: collapse;
-        border-radius: var(--radius);
-        overflow: hidden;
       }
       .enablement-objectives th,
       .enablement-objectives td {
-        padding: 4px 6px;
+        padding: 6px 8px;
         border: 1px solid #e5e7eb;
-        font-size: 12px;
-        color: var(--muted);
+        font-size: 13px;
       }
       .enablement-objectives .category {
         font-weight: 700;
-        display: flex;
-        align-items: center;
-        gap: 4px;
+      }
+      .enablement-objectives tr.smart {
+        background: #fefce8;
       }
       .enablement-objectives a {
         color: var(--accent-blue);
         text-decoration: underline;
-      }
-      .enablement-objectives .ico {
-        width: 16px;
-        height: 16px;
-        stroke: currentColor;
-        stroke-width: 1.8;
-        fill: none;
-      }
-      .enablement-objectives col.obj {
-        width: 50%;
-      }
-      .enablement-objectives col.path {
-        width: 30%;
       }
 
       .num-cell {
@@ -878,11 +862,6 @@
 
           <div class="enablement-objectives">
             <table>
-              <colgroup>
-                <col class="cat" />
-                <col class="obj" />
-                <col class="path" />
-              </colgroup>
               <thead>
                 <tr>
                   <th>Category</th>
@@ -892,14 +871,7 @@
               </thead>
               <tbody>
                 <tr>
-                  <td class="category" rowspan="3">
-                    <svg class="ico" viewBox="0 0 24 24">
-                      <circle cx="12" cy="12" r="9" />
-                      <circle cx="12" cy="12" r="5" />
-                      <circle cx="12" cy="12" r="1" />
-                    </svg>
-                    Yearly Goals
-                  </td>
+                  <td class="category" rowspan="3">🎯 Yearly Goals</td>
                   <td>Grow strategic account relationships</td>
                   <td><a href="#practice">practice</a>, <a href="#course">course</a></td>
                 </tr>
@@ -912,13 +884,7 @@
                   <td><a href="#practice">practice</a>, <a href="#course">course</a></td>
                 </tr>
                 <tr>
-                  <td class="category" rowspan="3">
-                    <svg class="ico" viewBox="0 0 24 24">
-                      <path d="M9 12.75L11.25 15L15 9.75" />
-                      <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" />
-                    </svg>
-                    Near-Term Priorities
-                  </td>
+                  <td class="category" rowspan="3">✅ Near-Term Priorities</td>
                   <td>Master objection handling</td>
                   <td><a href="#practice">practice</a>, <a href="#course">course</a></td>
                 </tr>
@@ -930,16 +896,11 @@
                   <td>Strengthen demo skills</td>
                   <td><a href="#practice">practice</a></td>
                 </tr>
-                <tr>
-                  <td class="category" rowspan="2">
-                    <svg class="ico" viewBox="0 0 24 24">
-                      <path d="M12 18V12.75M12 12.75C12.5179 12.75 13.0206 12.6844 13.5 12.561M12 12.75C11.4821 12.75 10.9794 12.6844 10.5 12.561M14.25 20.0394C13.5212 20.1777 12.769 20.25 12 20.25C11.231 20.25 10.4788 20.1777 9.75 20.0394M13.5 22.422C13.007 22.4736 12.5066 22.5 12 22.5C11.4934 22.5 10.993 22.4736 10.5 22.422M14.25 18V17.8083C14.25 16.8254 14.9083 15.985 15.7585 15.4917C17.9955 14.1938 19.5 11.7726 19.5 9C19.5 4.85786 16.1421 1.5 12 1.5C7.85786 1.5 4.5 4.85786 4.5 9C4.5 11.7726 6.00446 14.1938 8.24155 15.4917C9.09173 15.985 9.75 16.8254 9.75 17.8083V18" />
-                    </svg>
-                    Smart Suggestions
-                  </td>
+                <tr class="smart">
+                  <td class="category" rowspan="2">💡 Smart Suggestions</td>
                   <td colspan="2">Consider a <a href="#practice">practice</a> session on enterprise discovery.</td>
                 </tr>
-                <tr>
+                <tr class="smart">
                   <td colspan="2">Enroll in a <a href="#course">course</a> on competitive analysis.</td>
                 </tr>
               </tbody>
