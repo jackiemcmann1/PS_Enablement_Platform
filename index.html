@@ -690,15 +690,15 @@
 .course-grid .card{ display:flex; flex-direction:column; height:100%; }
 
 /* one row for actions, pinned to bottom */
-.btn-row{ display:flex; gap:10px; }
+.btn-row{ display:flex; gap:10px; flex-wrap:wrap; }
+.btn-row .cta{ flex:1 1 calc(50% - 5px); min-width:0; }
 .card-action{ margin-top:auto; padding-top:12px; }
 
 /* shared button base */
 .cta{
   display:inline-flex; align-items:center; justify-content:center;
   height:44px; padding:0 24px; border-radius:12px; font-weight:700;
-  text-decoration:none; white-space:nowrap;      /* prevent wrapping */
-  flex:1;                                        /* equal widths */
+  text-decoration:none;
   background:var(--primary); color:#fff; border:3px solid var(--accent-yellow);
 }
 .cta:hover{
