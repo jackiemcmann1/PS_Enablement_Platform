@@ -6,7 +6,7 @@
     <title>The Consultant's Way — Mock Platform</title>
 
     <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -225,9 +225,19 @@
         fill: none;
       }
       .topbar-title {
-        color: var(--accent-yellow);
-        font-size: 2rem;
+        font-family: 'Inter', system-ui, sans-serif;
+        color: #132039;
+        text-align: left;
+      }
+      .topbar-title .title {
+        font-size: 1.875rem;
         font-weight: 700;
+        letter-spacing: -0.01em;
+        margin-bottom: 4px; /* ≈ mb-2 */
+      }
+      .topbar-subtitle {
+        font-size: 0.875rem;
+        color: #6B7280;
       }
       .topbar-right {
         margin-left: auto;
@@ -876,7 +886,12 @@
 
       <!-- Topbar -->
       <header class="topbar">
-        <div class="topbar-title">Professional Services Enablement</div>
+        <div class="topbar-title">
+          <div class="title">Professional Services Enablement</div>
+          <div class="topbar-subtitle">
+            A learning &amp; coaching platform for consulting teams.
+          </div>
+        </div>
         <div class="topbar-right">
           <a class="subtle" href="#settings" data-page="settings">Settings</a>
           <div class="avatar" title="Profile">
