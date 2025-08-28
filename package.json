@@ -4,7 +4,8 @@
   "description": "A template for HTML and CSS",
   "main": "index.html",
   "scripts": {
-    "start": "serve"
+    "start": "serve",
+    "test": "jest"
   },
   "keywords": [
     "html",
@@ -13,6 +14,10 @@
   "author": "Ives van Hoorne",
   "license": "MIT",
   "devDependencies": {
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.8.0",
+    "jest": "^30.1.1",
+    "jest-environment-jsdom": "^30.1.1",
     "serve": "11.2.0"
   }
 }
