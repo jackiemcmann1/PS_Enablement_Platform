@@ -722,7 +722,7 @@
           </button>
         </div>
         <nav class="nav">
-          <a href="#dashboard" data-page="dashboard" class="active" title="Home" aria-label="Home">
+          <a href="#home" data-page="home" class="active" title="Home" aria-label="Home">
             <svg class="ico" viewBox="0 0 24 24">
               <path d="M3 12l9-7 9 7M5 10v10h14V10" />
             </svg>
@@ -764,7 +764,7 @@
               <path d="M9 9h6" />
               <path d="M9 13h6" />
             </svg>
-            <span class="label">Team Dashboard</span>
+            <span class="label">Team Home</span>
           </a>
         </div>
       </aside>
@@ -784,8 +784,8 @@
 
       <!-- Main -->
       <main class="main">
-        <!-- DASHBOARD -->
-        <section id="dashboard" class="page active">
+        <!-- HOME -->
+        <section id="home" class="page active">
           <div class="search-wrapper">
             <div class="search">
               <div class="dot"></div>
@@ -1397,10 +1397,10 @@
       }
 
       wireDataPageLinks();
-      const initial = location.hash?.replace("#", "") || "dashboard";
+      const initial = location.hash?.replace("#", "") || "home";
       show(initial);
       window.addEventListener("popstate", (e) =>
-        show((e.state && e.state.page) || "dashboard")
+        show((e.state && e.state.page) || "home")
       );
 
       // Sidebar collapse
