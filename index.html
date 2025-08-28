@@ -387,6 +387,59 @@
         color: var(--accent-yellow);
       }
 
+      .certificate-list {
+        margin: 16px 0 24px;
+        background: #ffffff;
+        border-radius: var(--radius);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+      }
+      .certificate-list table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .certificate-list th,
+      .certificate-list td {
+        padding: 6px 8px;
+        border-bottom: 1px solid #e5e7eb;
+        line-height: 1.35;
+        text-align: left;
+      }
+      .certificate-list th {
+        font-size: 0.875rem;
+      }
+      .certificate-list td {
+        font-size: 0.75rem;
+        color: #6b7280;
+      }
+      .certificate-list thead th {
+        background: var(--primary);
+        color: var(--white);
+      }
+      .certificate-list .category {
+        font-weight: 700;
+      }
+      .certificate-list tr.smart .category {
+        color: var(--accent-yellow);
+      }
+      .certificate-list tr.smart {
+        background: none;
+      }
+      .certificate-list tr.smart td:not(.category) {
+        font-style: italic;
+        color: var(--accent-yellow);
+      }
+      .certificate-list tr.smart td a {
+        font-weight: 400;
+      }
+      .certificate-list a {
+        color: #6b7280;
+        text-decoration: underline;
+      }
+      .certificate-list tr.smart a {
+        color: var(--accent-yellow);
+      }
+
       .num-cell {
         color: #5280bc;
         text-decoration: underline;
@@ -1238,12 +1291,18 @@
               </div>
             </div>
 
-            <!-- Utilization & Projects (Dual-axis Lines) -->
-            <div class="card wide" style="grid-column: 1 / -1">
-              <h2>Utilization & Project Staffing</h2>
-              <canvas id="utilizationChart"></canvas>
-              <div class="subtle" style="margin-top: 8px">
-                Current Projects: 3 &nbsp;|&nbsp; YTD Projects: 12
+            <div class="card wide" style="grid-column:1 / -1">
+              <div class="certificate-list">
+                <table>
+                  <tbody>
+                    <tr><th colspan="2" class="enablement-objectives-header">Certificates Earned</th></tr>
+                    <tr><td>✓ Consulting Foundations</td></tr>
+                    <tr><td>✓ Project Leadership</td></tr>
+                    <tr><th colspan="2" class="enablement-objectives-header">Certificates In Progress</th></tr>
+                    <tr><td>◷ Solution Selling</td></tr>
+                    <tr><td>◷ Practice Management</td></tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -1902,7 +1961,6 @@
       function drawAllCharts() {
         const pr = document.getElementById("projReviewsChart");
         const sp = document.getElementById("skillPracticeChart");
-        const ut = document.getElementById("utilizationChart");
         if (pr)
           lineChart(
             pr,
@@ -1920,17 +1978,6 @@
             [80, 75, 90, 85],
             [BRAND.yellow, BRAND.blue, BRAND.green, BRAND.blue],
             100
-          );
-        if (ut)
-          dualLineChart(
-            ut,
-            ["Jan", "Feb", "Mar", "Apr"],
-            [65, 72, 80, 76],
-            [2, 3, 4, 3],
-            BRAND.blue,
-            BRAND.green,
-            100,
-            5
           );
       }
 
