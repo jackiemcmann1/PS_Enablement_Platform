@@ -696,7 +696,7 @@
 
 /* one row for actions, pinned to bottom */
 .btn-row{ display:flex; gap:10px; flex-wrap:wrap; }
-.btn-row .cta{ flex:1 1 calc(50% - 5px); min-width:0; }
+.btn-row .cta{ flex:1 1 calc(50% - 5px); min-width:0; white-space:nowrap; }
 .card-action{ margin-top:auto; padding-top:12px; }
 
 /* shared button base */
@@ -711,7 +711,7 @@
   color:var(--primary);
   border:3px solid var(--accent-yellow);
 }
-.cta.cta-sm{ font-size:14px; height:36px; padding:0 18px; }
+.cta.cta-sm{ font-size:12px; height:36px; padding:0 16px; }
 .cta.overview{background:var(--white);color:var(--primary);border:3px solid var(--accent-yellow);}
 .cta.overview:hover{background:var(--accent-yellow);color:var(--primary);border:3px solid var(--accent-yellow);}
 /* --- Content Center --- */
