@@ -9,6 +9,10 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
         --primary: #12203a;
@@ -1722,8 +1726,13 @@
         });
 
         ctx.fillStyle = "#6B7280";
-        ctx.font = "12px system-ui, -apple-system, Segoe UI, Arial";
-        labels.forEach((t, i) => ctx.fillText(t, X(i) - 8, h - 2));
+        ctx.font = '12px Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif';
+        labels.forEach((t, i) => {
+          const textWidth = ctx.measureText(t).width;
+          const x = X(i) - textWidth / 2;
+          const clampedX = Math.min(Math.max(x, 0), w - textWidth);
+          ctx.fillText(t, clampedX, h - 2);
+        });
       }
 
       function barChart(canvas, labels, data, colors, yMax = 100) {
@@ -1750,9 +1759,12 @@
           ctx.fill();
 
           ctx.fillStyle = "#6B7280";
-          ctx.font = "12px system-ui, -apple-system, Segoe UI, Arial";
+          ctx.font = '12px Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif';
           const label = t.length > 10 ? t.slice(0, 10) + "…" : t;
-          ctx.fillText(label, x, h - 2);
+          const textWidth = ctx.measureText(label).width;
+          const xPos = x + bw / 2 - textWidth / 2;
+          const clampedX = Math.min(Math.max(xPos, 0), w - textWidth);
+          ctx.fillText(label, clampedX, h - 2);
         });
       }
 
@@ -1818,8 +1830,13 @@
 
         // X labels
         ctx.fillStyle = "#6B7280";
-        ctx.font = "12px system-ui, -apple-system, Segoe UI, Arial";
-        labels.forEach((t, i) => ctx.fillText(t, X(i) - 8, h - 2));
+        ctx.font = '12px Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif';
+        labels.forEach((t, i) => {
+          const textWidth = ctx.measureText(t).width;
+          const x = X(i) - textWidth / 2;
+          const clampedX = Math.min(Math.max(x, 0), w - textWidth);
+          ctx.fillText(t, clampedX, h - 2);
+        });
       }
 
       function comboBarLineChart(
@@ -1870,12 +1887,15 @@
 
         // X-axis labels
         ctx.fillStyle = "#6B7280";
-        ctx.font = "12px system-ui, -apple-system, Segoe UI, Arial";
+        ctx.font = '12px Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif';
         labels.forEach((t, i) => {
           const x =
             area.left +
             ((i + 0.5) * (area.right - area.left)) / labels.length;
-          ctx.fillText(t, x - 8, h - 2);
+          const textWidth = ctx.measureText(t).width;
+          const xPos = x - textWidth / 2;
+          const clampedX = Math.min(Math.max(xPos, 0), w - textWidth);
+          ctx.fillText(t, clampedX, h - 2);
         });
       }
 
