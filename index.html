@@ -312,6 +312,32 @@
         font-weight: 600;
       }
 
+      .enablement-objectives {
+        margin: 16px 0 24px;
+      }
+      .enablement-objectives table {
+        width: 100%;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-collapse: collapse;
+      }
+      .enablement-objectives th,
+      .enablement-objectives td {
+        padding: 6px 8px;
+        border: 1px solid #e5e7eb;
+        font-size: 13px;
+      }
+      .enablement-objectives .category {
+        font-weight: 700;
+      }
+      .enablement-objectives tr.smart {
+        background: #fefce8;
+      }
+      .enablement-objectives a {
+        color: var(--accent-blue);
+        text-decoration: underline;
+      }
+
       .num-cell {
         color: #5280bc;
         text-decoration: underline;
@@ -825,6 +851,34 @@
               <input placeholder="What do you want to work on today?" />
                 <a href="#coach" data-page="coach" class="cta">Coach Me</a>
             </div>
+          </div>
+
+          <div class="enablement-objectives">
+            <table>
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Objectives</th>
+                  <th>Recommended Path</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="category">🎯 Yearly Goals</td>
+                  <td>Grow strategic account relationships</td>
+                  <td><a href="#practice">practice</a>, <a href="#course">course</a></td>
+                </tr>
+                <tr>
+                  <td class="category">✅ Near-Term Priorities</td>
+                  <td>Master objection handling</td>
+                  <td><a href="#practice">practice</a>, <a href="#course">course</a></td>
+                </tr>
+                <tr class="smart">
+                  <td class="category">💡 Smart Suggestions</td>
+                  <td colspan="2">Consider a <a href="#practice">practice</a> session on enterprise discovery.</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
 
           <div class="grid">
