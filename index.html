@@ -347,12 +347,15 @@
       .enablement-objectives .category {
         font-weight: 700;
       }
+      .enablement-objectives tr.smart .category {
+        color: var(--accent-yellow);
+      }
       .enablement-objectives tr.smart {
         background: none;
       }
       .enablement-objectives tr.smart td:not(.category) {
         font-style: italic;
-        color: #6b7280;
+        color: var(--accent-yellow);
       }
       .enablement-objectives tr.smart td a {
         font-weight: 400;
@@ -360,6 +363,9 @@
       .enablement-objectives a {
         color: #6b7280;
         text-decoration: underline;
+      }
+      .enablement-objectives tr.smart a {
+        color: var(--accent-yellow);
       }
 
       .num-cell {
