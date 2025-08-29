@@ -815,11 +815,25 @@
         padding: 0 24px;
       }
 
-      #employee-review .card { text-align:center; gap:16px; padding:32px; }
+      #employee-review .card {
+        text-align:center;
+        gap:16px;
+        padding:32px;
+        display:flex;
+        flex-direction:column;
+      }
       #employee-review .card h2 { font-size:2rem; margin-bottom:24px; }
-      #employee-review .review-actions { display:flex; gap:10px; align-items:center; }
-      #employee-review .upload-btn { flex:0 0 auto; }
-      #employee-review .template-btn { flex:1; }
+      #employee-review .review-actions {
+        margin-top:auto;
+        display:flex;
+        gap:10px;
+      }
+      #employee-review .review-actions .cta {
+        height:48px;            /* or match the hero button height */
+        padding-top:0;
+        padding-bottom:0;
+        line-height:48px;       /* ensures vertical alignment */
+      }
 
       /* --- Team Dashboard --- */
       #team .filters-row {
