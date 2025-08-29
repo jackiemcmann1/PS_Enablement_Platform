@@ -815,6 +815,12 @@
         padding: 0 24px;
       }
 
+      #employee-review .card { text-align:center; gap:16px; padding:32px; }
+      #employee-review .card h2 { font-size:2rem; margin-bottom:24px; }
+      #employee-review .review-actions { display:flex; gap:10px; align-items:center; }
+      #employee-review .upload-btn { flex:0 0 auto; }
+      #employee-review .template-btn { flex:1; }
+
       /* --- Team Dashboard --- */
       #team .filters-row {
         display: flex;
@@ -1638,7 +1644,7 @@
               <svg class="icon" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/>
               </svg>
-              <button class="cta">Complete an Employee Review</button>
+              <button class="cta" data-page="employee-review">Complete an Employee Review</button>
             </div>
             <div class="card">
               <svg class="icon" viewBox="0 0 24 24">
@@ -1646,6 +1652,21 @@
               </svg>
               <button class="cta">Create/Edit Enablement Objectives</button>
             </div>
+          </div>
+        </section>
+
+        <section id="employee-review" class="page">
+          <h1>Complete an Employee Review</h1>
+          <div class="grid">
+            <!-- Repeat card structure for each review type -->
+            <div class="card">
+              <h2>Annual Review</h2>
+              <div class="review-actions">
+                <button class="cta cta-sm overview upload-btn">Upload</button>
+                <button class="cta template-btn">Use Our Template</button>
+              </div>
+            </div>
+            <!-- Project Review, Ad Hoc Review, Performance Improvement Plan -->
           </div>
         </section>
 
