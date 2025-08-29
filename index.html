@@ -815,8 +815,9 @@
         padding: 0 24px;
       }
 
-      #employee-review .card { text-align:center; gap:16px; padding:32px; }
-      #employee-review .card h2 { font-size:2rem; margin-bottom:24px; }
+      #employee-review .grid { grid-auto-rows:1fr; }
+      #employee-review .card { text-align:center; gap:16px; padding:32px; height:100%; }
+      #employee-review .card h2 { font-size:2rem; margin:0; flex:1; display:flex; align-items:center; justify-content:center; }
       #employee-review .review-actions { display:flex; gap:10px; align-items:flex-end; margin-top:auto; }
       #employee-review .upload-btn { flex:0 0 auto; }
       #employee-review .template-btn { flex:1; }
